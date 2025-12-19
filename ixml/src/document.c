@@ -56,7 +56,7 @@ void ixmlDocument_free(IXML_Document *doc)
 
 /*!
  * When this function is called first time, nodeptr is the root of the subtree,
- * so it is not necessay to do two steps recursion.
+ * so it is not necessary to do two steps recursion.
  *
  * Internal function called by ixmlDocument_importNode
  */
