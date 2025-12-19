@@ -101,7 +101,7 @@ static void ixmlNode_freeSingleNode(
 #if 0
 /*
  * Old implementation of ixmlNode_free(). Due to its recursive nature, it was
- * succeptible to attacks overflowing the stack.
+ * susceptible to attacks overflowing the stack.
  *
  * void ixmlNode_free(IXML_Node *nodeptr)
  */
