@@ -508,9 +508,9 @@ static int ixmlNode_allowChildren(
  */
 int ixmlNode_compare(
 	/*! [in] The first \b Node. */
-	IXML_Node *srcNode,
+	const IXML_Node *srcNode,
 	/*! [in] The second \b Node. */
-	IXML_Node *destNode)
+	const IXML_Node *destNode)
 {
 	assert(srcNode && destNode);
 
