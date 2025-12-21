@@ -460,7 +460,7 @@ UPNP_EXPORT_SPEC int ixmlNode_insertBefore(
  *
  * \return An integer representing one of the following:
  *      \li \c IXML_SUCCESS: The operation completed successfully.
- *      \li \c IXML_INVALID_PARAMTER: Either \b nodeptr, \b newChild,
+ *      \li \c IXML_INVALID_PARAMETER: Either \b nodeptr, \b newChild,
  *      	or \b oldChild is \c NULL.
  *      \li \c IXML_HIERARCHY_REQUEST_ERR: The \b newChild is not
  *            a type of \b Node that can be inserted into this tree or
@@ -639,7 +639,7 @@ UPNP_EXPORT_SPEC void ixmlAttr_free(
  * \brief Initializes a \b CDATASection node.
  */
 UPNP_EXPORT_SPEC void ixmlCDATASection_init(
-	/*! [in] The <b>CDATA Section Node</b> to iniatialize. */
+	/*! [in] The <b>CDATA Section Node</b> to initialize. */
 	IXML_CDATASection *nodeptr);
 
 /*!
@@ -894,7 +894,7 @@ UPNP_EXPORT_SPEC int ixmlDocument_createElementNSEx(
  * namespace URI.
  *
  * \return A pointer to the new \b Element object with tagName qualifiedName,
- * prefix and localName extraced from qualfiedName, nodeName of qualfiedName,
+ * prefix and localName extracted from qualifiedName, nodeName of qualfiedName,
  * namespaceURI of namespaceURI or \c NULL on failure.
  */
 UPNP_EXPORT_SPEC IXML_Element *ixmlDocument_createElementNS(
@@ -1132,7 +1132,7 @@ UPNP_EXPORT_SPEC IXML_Attr *ixmlElement_getAttributeNode(
  * If an attribute already exists with \b newAttr as a name, it will be
  * replaced with the new one and the old one will be returned in \b rtAttr.
  *
- * \return If successfull, the replaced attribute node is returned in rtAttr,
+ * \return If successful, the replaced attribute node is returned in rtAttr,
  * otherwise, \b NULL is returned in this pointer. The function return value
  * is an integer representing one of the following:
  *     \li \c IXML_SUCCESS: The operation completed successfully.
@@ -1203,12 +1203,12 @@ UPNP_EXPORT_SPEC const DOMString ixmlElement_getAttributeNS(
 	const DOMString localname);
 
 /*!
- * \brief Adds a new attribute to an \b Element using the local name and
- * namespace URI.
+ * \brief Adds a new attribute to an \b Element using the local qualified name
+ * and namespace URI.
  *
- * If another attribute matches the same local name and namespace, the prefix
- * is changed to be the prefix part of the \c qualifiedName and the value is
- * changed to \b value.
+ * If another attribute matches the same local qualified name and namespace, the
+ * prefix is changed to be the prefix part of the \c qualifiedName and the value
+ * is changed to \b value.
  *
  * \return An integer representing one of the following:
  *     \li \c IXML_SUCCESS: The operation completed successfully.
@@ -1407,10 +1407,10 @@ UPNP_EXPORT_SPEC IXML_Node *ixmlNamedNodeMap_removeNamedItem(
 	const DOMString name);
 
 /*!
- * \brief Retrieves the indexth item in the map. If index is greater than or
+ * \brief Retrieves the index_th item in the map. If index is greater than or
  * equal to the number of nodes in this map, this returns \b NULL.
  *
- * \return The node at the indexth position in the map, or \b NULL if that is
+ * \return The node at the index_th position in the map, or \b NULL if that is
  * 	not a valid index.
  */
 UPNP_EXPORT_SPEC IXML_Node *ixmlNamedNodeMap_item(
@@ -1635,12 +1635,12 @@ UPNP_EXPORT_SPEC void ixmlRelaxParser(
  * \brief Sets the handler to call before a node is freed.
  */
 UPNP_EXPORT_SPEC void ixmlSetBeforeFree(
-	/*! [in] If \b hndlr is set to a function, it will be called before any
-	 * node is freed, with the node as its parameter. This allows scripting
-	 * languages to do their garbage collection, without maintaining their
-	 * own tree structure.
+	/*! [in] If \b handler is set to a function, it will be called before
+	 * any node is freed, with the node as its parameter. This allows
+	 * scripting languages to do their garbage collection, without
+	 * maintaining their own tree structure.
 	 */
-	IXML_BeforeFreeNode_t hndlr);
+	IXML_BeforeFreeNode_t handler);
 #endif
 
 /*!
