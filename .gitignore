@@ -84,6 +84,7 @@ GTAGS
 *.creator
 *.creator.user
 *.creator.user.*
+CMakeLists.txt.user
 *.cxxflags
 *.files
 *.includes
@@ -153,6 +154,7 @@ upnp/generator/generator
 
 build
 build.win32
+tmp
 
 compile_commands.json
 pupnp-cppcheck-build-dir
