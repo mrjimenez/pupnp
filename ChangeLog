@@ -15,6 +15,7 @@ Version 1.14.26
 	- Bugfix skip init on vpn adaptors (#500)
 	- readFromSSDPSocket: Don't return error when sockets receive zero
 	length packet (#501)
+	- Fix warning on Mac compilation (#503)
 	- shutdown sockets in finish routine (#504)
 	- Fix segfault on ixml, thanks to Harrison Green (hgarrereyn) (#506)
 
