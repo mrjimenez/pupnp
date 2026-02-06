@@ -8,11 +8,11 @@ on:
 # on: workflow_dispatch
 
 env:
-    DEBUG: "y"
-    RUN_CONFIGURE: false
-    RUN_BUILD: false
-    RUN_RELEASE: false
-    RUN_HOME_KEEPING: true
+  DEBUG: "y"
+  RUN_CONFIGURE: true
+  RUN_BUILD: true
+  RUN_RELEASE: true
+  RUN_HOME_KEEPING: true
 
 jobs:
   new_release:
