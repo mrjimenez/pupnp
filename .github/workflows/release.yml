@@ -110,7 +110,10 @@ jobs:
           git config --global user.email 'github_action@users.noreply.github.com'
           # Commit
           git status >> "$GITHUB_STEP_SUMMARY"
+          HOME_KEEPING_BRANCH=${{ github.ref_name }}-home_keeping
+          # Create a new branch, since the actual branch might be protected
+          git switch -c $HOME_KEEPING_BRANCH
           git add ChangeLog configure.ac docs/Doxyfile libupnp.spec
           git commit -am "Home keeping for the next release"
           git status >> "$GITHUB_STEP_SUMMARY"
-          git push origin HEAD:branch-1.14.x
+          git push origin HEAD:$HOME_KEEPING_BRANCH
