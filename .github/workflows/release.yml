@@ -2,9 +2,9 @@ name: New Release
 
 # on: [push]
 on:
-    push:
-        tags:
-            - "release-*"
+  push:
+    tags:
+      - "release-*"
 # on: workflow_dispatch
 
 env:
@@ -15,102 +15,102 @@ env:
     RUN_HOME_KEEPING: true
 
 jobs:
-    new_release:
-        name: Create release ${{ github.ref_name }}
-        runs-on: [ubuntu-latest]
-        permissions:
-            contents: write
-        steps:
-            - name: Checkout
-              # Checkout the repo
-              uses: actions/checkout@v6
-            - name: Preparation
-              # Prepare some useful environment variables
-              run: |
-                  #
-                  # Parse the tag name
-                  #
-                  # The "next_release" variable must exist in the parent process
-                  # so that the script code may alter it.
-                  #
-                  next_release=
-                  # This is for starting the workflow manually, in which case
-                  # github.ref_name will be undefined.
-                  git branch >> "$GITHUB_STEP_SUMMARY"
-                  TAG_NAME=${{ github.ref_name }}
-                  if [[ $DEBUG == "n" && -z $TAG_NAME ]]; then
-                    echo "Tag name is empty" >> "$GITHUB_STEP_SUMMARY"
-                    exit 1
-                  fi
-                  # Parse the tag name and calculate the next release value
-                  DEBUG=${DEBUG} scripts/parse_release.sh $TAG_NAME
-            - name: Configure
-              if: ${{ env.RUN_CONFIGURE == 'true' }}
-              run: >
-                  ./bootstrap &&
-                  ./configure
-            - name: Build
-              if: ${{ env.RUN_BUILD == 'true' }}
-              id: build
-              #
-              # Build and run checks
-              run: |
-                  make distcheck
-            - name: Find bz2 name
-              id: find-bz-name
-              #
-              # Find out the bz2 name
-              run: |
-                  bz2_name=
-                  DEBUG=${DEBUG} scripts/find_out_bz2_name.sh
-            - name: SHA1
-              #
-              # Calculate the SHA1 checksum
-              run: |
-                  sha1sum ${bz2_name} > ${bz2_name}.sha1
-                  {
-                    echo '```bash'
-                    echo "sha1sum ${bz2_name} > ${bz2_name}.sha1"
-                    echo bz2_name=${{ steps.find-bz-name.outputs.bz2_name }}
-                    echo '```'
-                  } >>  "$GITHUB_STEP_SUMMARY"
-            - name: List files in the repository root
-              run: |
-                  {
-                  echo '```bash'
-                  #ls -la ${{ github.workspace }}
-                  #echo
-                  #ls libupnp-*.tar.bz2
-                  #echo
-                  ls -la
-                  echo '```'
-                  }  >> "$GITHUB_STEP_SUMMARY"
-            - name: Release
-              #
-              # This action uploads the generated release files to GitHub
-              # https://github.com/softprops/action-gh-release
-              # https://docs.github.com/rest/releases/releases#generate-release-notes-content-for-a-release
-              if: ${{ env.RUN_RELEASE  == 'true' }}
-              uses: softprops/action-gh-release@v2
-              with:
-                  draft: true
-                  generate_release_notes: true
-                  files: |
-                      ${{ steps.find-bz-name.outputs.bz2_name }}
-                      ${{ steps.find-bz-name.outputs.bz2_name }}.sha1
-            - name: Home keeping
-              if: ${{ env.RUN_HOME_KEEPING  == 'true' }}
-              run: |
-                  #
-                  # Edit some files
-                  DEBUG=${DEBUG} scripts/home_keeping.sh
-                  #
-                  # Configure git
-                  git config --global user.name 'GitHub Action'
-                  git config --global user.email 'github_action@users.noreply.github.com'
-                  # Commit
-                  git status >> "$GITHUB_STEP_SUMMARY"
-                  git add ChangeLog configure.ac docs/Doxyfile libupnp.spec
-                  git commit -am "Home keeping for the next release"
-                  git status >> "$GITHUB_STEP_SUMMARY"
-                  git push origin HEAD:branch-1.14.x
+  new_release:
+    name: Create release ${{ github.ref_name }}
+    runs-on: [ubuntu-latest]
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        # Checkout the repo
+        uses: actions/checkout@v6
+      - name: Preparation
+        # Prepare some useful environment variables
+        run: |
+          #
+          # Parse the tag name
+          #
+          # The "next_release" variable must exist in the parent process
+          # so that the script code may alter it.
+          #
+          next_release=
+          # This is for starting the workflow manually, in which case
+          # github.ref_name will be undefined.
+          git branch >> "$GITHUB_STEP_SUMMARY"
+          TAG_NAME=${{ github.ref_name }}
+          if [[ $DEBUG == "n" && -z $TAG_NAME ]]; then
+            echo "Tag name is empty" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          # Parse the tag name and calculate the next release value
+          DEBUG=${DEBUG} scripts/parse_release.sh $TAG_NAME
+      - name: Configure
+        if: ${{ env.RUN_CONFIGURE == 'true' }}
+        run: >
+          ./bootstrap &&
+          ./configure
+      - name: Build
+        if: ${{ env.RUN_BUILD == 'true' }}
+        id: build
+        #
+        # Build and run checks
+        run: |
+          make distcheck
+      - name: Find bz2 name
+        id: find-bz-name
+        #
+        # Find out the bz2 name
+        run: |
+          bz2_name=
+          DEBUG=${DEBUG} scripts/find_out_bz2_name.sh
+      - name: SHA1
+        #
+        # Calculate the SHA1 checksum
+        run: |
+          sha1sum ${bz2_name} > ${bz2_name}.sha1
+          {
+            echo '```bash'
+            echo "sha1sum ${bz2_name} > ${bz2_name}.sha1"
+            echo bz2_name=${{ steps.find-bz-name.outputs.bz2_name }}
+            echo '```'
+          } >>  "$GITHUB_STEP_SUMMARY"
+      - name: List files in the repository root
+        run: |
+          {
+          echo '```bash'
+          #ls -la ${{ github.workspace }}
+          #echo
+          #ls libupnp-*.tar.bz2
+          #echo
+          ls -la
+          echo '```'
+          }  >> "$GITHUB_STEP_SUMMARY"
+      - name: Release
+        #
+        # This action uploads the generated release files to GitHub
+        # https://github.com/softprops/action-gh-release
+        # https://docs.github.com/rest/releases/releases#generate-release-notes-content-for-a-release
+        if: ${{ env.RUN_RELEASE  == 'true' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          generate_release_notes: true
+          files: |
+            ${{ steps.find-bz-name.outputs.bz2_name }}
+            ${{ steps.find-bz-name.outputs.bz2_name }}.sha1
+      - name: Home keeping
+        if: ${{ env.RUN_HOME_KEEPING  == 'true' }}
+        run: |
+          #
+          # Edit some files
+          DEBUG=${DEBUG} scripts/home_keeping.sh
+          #
+          # Configure git
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'github_action@users.noreply.github.com'
+          # Commit
+          git status >> "$GITHUB_STEP_SUMMARY"
+          git add ChangeLog configure.ac docs/Doxyfile libupnp.spec
+          git commit -am "Home keeping for the next release"
+          git status >> "$GITHUB_STEP_SUMMARY"
+          git push origin HEAD:branch-1.14.x
