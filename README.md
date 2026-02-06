@@ -3,15 +3,15 @@
 - [The GitHub project page](https://github.com/pupnp/pupnp) is where all the real action happens.
 - [The old Source Forge project page is linked here.](https://sourceforge.net/projects/pupnp)
 
-| branch        | status                                                                                              |
-| ------------- | --------------------------------------------------------------------------------------------------- |
-| main (use 1.14.x) | ![master](https://github.com/pupnp/pupnp/workflows/Build/badge.svg)                             |
-| branch-1.14.x | ![1.14.x](https://github.com/pupnp/pupnp/actions/workflows/ccpp.yml/badge.svg?branch=branch-1.14.x) |
-| branch-1.12.x | ![1.12.x](https://github.com/pupnp/pupnp/actions/workflows/ccpp.yml/badge.svg?branch=branch-1.12.x) |
-| branch-1.10.x | ![1.10.x](https://github.com/pupnp/pupnp/actions/workflows/ccpp.yml/badge.svg?branch=branch-1.10.x) |
-| branch-1.8.x  | ![1.8.x](https://github.com/pupnp/pupnp/actions/workflows/ccpp.yml/badge.svg?branch=branch-1.8.x)   |
-| branch-1.6.x  | ![1.6.x](https://github.com/pupnp/pupnp/actions/workflows/ccpp.yml/badge.svg?branch=branch-1.6.x)   |
-| branch-1.4.x  | ![1.4.x](https://github.com/pupnp/pupnp/actions/workflows/ccpp.yml/badge.svg?branch=branch-1.4.x)   |
+| branch            | status                                                                                              |
+| ----------------- | --------------------------------------------------------------------------------------------------- |
+| main (use 1.14.x) | ![master](https://github.com/pupnp/pupnp/workflows/Build/badge.svg)                                 |
+| branch-1.14.x     | ![1.14.x](https://github.com/pupnp/pupnp/actions/workflows/ccpp.yml/badge.svg?branch=branch-1.14.x) |
+| branch-1.12.x     | ![1.12.x](https://github.com/pupnp/pupnp/actions/workflows/ccpp.yml/badge.svg?branch=branch-1.12.x) |
+| branch-1.10.x     | ![1.10.x](https://github.com/pupnp/pupnp/actions/workflows/ccpp.yml/badge.svg?branch=branch-1.10.x) |
+| branch-1.8.x      | ![1.8.x](https://github.com/pupnp/pupnp/actions/workflows/ccpp.yml/badge.svg?branch=branch-1.8.x)   |
+| branch-1.6.x      | ![1.6.x](https://github.com/pupnp/pupnp/actions/workflows/ccpp.yml/badge.svg?branch=branch-1.6.x)   |
+| branch-1.4.x      | ![1.4.x](https://github.com/pupnp/pupnp/actions/workflows/ccpp.yml/badge.svg?branch=branch-1.4.x)   |
 
 Copyright (c) 2000-2003 Intel Corporation - All Rights Reserved.
 
@@ -102,7 +102,8 @@ The Portable SDK for UPnP&trade; Devices is distributed under the BSD (Berkeley 
 | -------------- | ---------- | ---------------------------------------- |
 | 1.18.0         | TBA ?      | [Portable UPnP SDK][Portable UPnP SDK]   |
 | 1.16.0         | canceled   | [Portable UPnP SDK][Portable UPnP SDK]   |
-| 1.14.26        | TBA        | [Portable UPnP SDK][Portable UPnP SDK]   |
+| 1.14.27        | TBA        | [Portable UPnP SDK][Portable UPnP SDK]   |
+| 1.14.26        | 2026-02-06 | [Portable UPnP SDK][Portable UPnP SDK]   |
 | 1.14.25        | 2025-09-18 | [Portable UPnP SDK][Portable UPnP SDK]   |
 | 1.14.24        | 2025-06-11 | [Portable UPnP SDK][Portable UPnP SDK]   |
 | 1.14.23        | 2025-06-07 | [Portable UPnP SDK][Portable UPnP SDK]   |
