@@ -723,7 +723,7 @@ static void ToUpperCase(
 /*!
  * \brief Finds a substring from a string in a case insensitive way.
  *
- * \return A pointer to the first occurence of s2 in s1.
+ * \return A pointer to the first occurrence of s2 in s1.
  */
 static char *StrStr(
 	/*! Input string. */
@@ -1184,7 +1184,7 @@ static int process_request(
 	SOCKINFO *info,
 	/*! [in] HTTP Request message. */
 	http_message_t *req,
-	/*! [out] Tpye of response. */
+	/*! [out] Type of response. */
 	enum resp_type *rtype,
 	/*! [out] Headers. */
 	membuffer *headers,
