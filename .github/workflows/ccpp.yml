@@ -181,44 +181,44 @@ jobs:
         tool: [autotools, cmake]
         conf: [Debug]
     steps:
-    - uses: actions/checkout@v6
-    - name: bootstrap and configure (autotools)
-      if: ${{ matrix.tool == 'autotools' }}
-      run: >
-        ./bootstrap &&
-        ./configure
-        --enable-debug
-        ${{ env.sanitizer_autotools_flags }}
-    - name: configure (cmake)
-      if: ${{ matrix.tool == 'cmake' }}
-      run: >
-        cmake
-        -S .
-        -B build
-        -DBUILD_TESTING=ON
-        -DCMAKE_BUILD_TYPE=${{ matrix.conf }}
-        -DDOWNLOAD_AND_BUILD_DEPS=ON
-        -DUPNP_ENABLE_OPEN_SSL=ON
-        ${{ env.cmake_sanitizer_flags }}
-        ${{ env.cmake_extra_flags }}
-    - name: build (autotools)
-      if: ${{ matrix.tool == 'autotools' }}
-      run: make
-    - name: build (cmake)
-      if: ${{ matrix.tool == 'cmake' }}
-      run: cmake --build build
-    - name: test ixml (autotools)
-      if: ${{ matrix.tool == 'autotools' }}
-      run: >
-        cd ixml && make check ||
-        (cat test-suite.log && exit 1)
-    - name: test upnp (autotools)
-      if: ${{ matrix.tool == 'autotools' }}
-      run: >
-        cd upnp && make check && cat test_init.log ||
-        (cat test-suite.log test_init.log && exit 1)
-    - name: ctest (cmake)
-      if: ${{ matrix.tool == 'cmake' }}
-      run: |
+      - uses: actions/checkout@v6
+      - name: bootstrap and configure (autotools)
+        if: ${{ matrix.tool == 'autotools' }}
+        run: >
+          ./bootstrap &&
+          ./configure
+          --enable-debug
+          ${{ env.sanitizer_autotools_flags }}
+      - name: configure (cmake)
+        if: ${{ matrix.tool == 'cmake' }}
+        run: >
+          cmake
+          -S .
+          -B build
+          -DBUILD_TESTING=ON
+          -DCMAKE_BUILD_TYPE=${{ matrix.conf }}
+          -DDOWNLOAD_AND_BUILD_DEPS=ON
+          -DUPNP_ENABLE_OPEN_SSL=ON
+          ${{ env.cmake_sanitizer_flags }}
+          ${{ env.cmake_extra_flags }}
+      - name: build (autotools)
+        if: ${{ matrix.tool == 'autotools' }}
+        run: make
+      - name: build (cmake)
+        if: ${{ matrix.tool == 'cmake' }}
+        run: cmake --build build
+      - name: test ixml (autotools)
+        if: ${{ matrix.tool == 'autotools' }}
+        run: >
+          cd ixml && make check ||
+          (cat test-suite.log && exit 1)
+      - name: test upnp (autotools)
+        if: ${{ matrix.tool == 'autotools' }}
+        run: >
+          cd upnp && make check && cat test_init.log ||
+          (cat test-suite.log test_init.log && exit 1)
+      - name: ctest (cmake)
+        if: ${{ matrix.tool == 'cmake' }}
+        run: |
           cd build
           ctest --output-on-failure
