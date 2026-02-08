@@ -1,0 +1,51 @@
+name: OmniOS test
+
+on: [workflow_dispatch]
+
+env:
+  sanitizer_autotools_flags: '
+    CFLAGS="-fsanitize=address,leak"
+    LDFLAGS="-fsanitize=address,leak"'
+
+  cmake_sanitizer_flags: "
+    -DCMAKE_C_FLAGS=-fsanitize=address,leak
+    -DCMAKE_CXX_FLAGS=-fsanitize=address,leak
+    -DCMAKE_SHARED_LINKER_FLAGS=-fsanitize=address,leak"
+
+  cmake_extra_flags: "
+    -DUPNP_ENABLE_UNSPECIFIED_SERVER=ON
+    -DUPNP_ENABLE_BLOCKING_TCP_CONNECTIONS=ON"
+
+jobs:
+  omnios:
+    name: Build OmniOS - ${{ matrix.conf }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        conf: [Debug, Release]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v6
+      - uses: vmactions/omnios-vm@v1
+        with:
+          prepare: |
+            pkg install cmake gcc14 make
+          run: |
+            cmake \
+            -S . \
+            -B build \
+            -DCMAKE_BUILD_TYPE=${{ matrix.conf }} \
+            -DBUILD_TESTING=ON \
+            -DDOWNLOAD_AND_BUILD_DEPS=ON \
+            -DUPNP_ENABLE_OPEN_SSL=ON \
+            -DCMAKE_C_FLAGS="-Wall -Wpedantic" \
+            -DCMAKE_INSTALL_PREFIX=${{ GITHUB.WORKSPACE }}/test-install \
+            ${{ env.cmake_extra_flags }}
+            cmake --build build --config ${{matrix.conf}}
+            cd build
+            ctest --output-on-failure
+            echo "ctest returned status "$?
+            cd ..
+            cmake -DBUILD_DIR=build -P cmake/post-test.cmake
+            cmake --install build --config ${{matrix.conf}}
