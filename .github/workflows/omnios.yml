@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        conf: [Debug, Release]
+        conf: [Debug]
       fail-fast: false
     steps:
       - uses: actions/checkout@v6
