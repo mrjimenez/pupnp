@@ -158,12 +158,12 @@ if(NOT PUPNP_VERSION_STRING)
 						FORCE
 				)
 				set(IXML_SOVERSION_STRING
-					${IXML_MAJ}
-					CACHE STRING "Version of libixml" FORCE
+					${IXML_MAJ}.${CMAKE_MATCH_3}.${CMAKE_MATCH_2}
+					CACHE STRING "SO Version of libixml" FORCE
 				)
 				message(
 					STATUS
-						"Setting ixml-soversion to ${IXML_SOVERSION_STRING}"
+						"Setting ixml so-version to ${IXML_SOVERSION_STRING}"
 				)
 			elseif(
 				line
@@ -189,12 +189,12 @@ if(NOT PUPNP_VERSION_STRING)
 						FORCE
 				)
 				set(UPNP_SOVERSION_STRING
-					${UPNP_MAJ}
-					CACHE STRING "Version of libupnp" FORCE
+					${UPNP_MAJ}.${CMAKE_MATCH_3}.${CMAKE_MATCH_2}
+					CACHE STRING "SO Version of libupnp" FORCE
 				)
 				message(
 					STATUS
-						"Setting upnp-soversion to ${UPNP_SOVERSION_STRING}"
+						"Setting upnp so-version to ${UPNP_SOVERSION_STRING}"
 				)
 			endif()
 		endforeach()
