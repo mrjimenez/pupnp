@@ -158,7 +158,7 @@ if(NOT PUPNP_VERSION_STRING)
 						FORCE
 				)
 				set(IXML_SOVERSION_STRING
-					${IXML_MAJ}.${CMAKE_MATCH_3}.${CMAKE_MATCH_2}
+					${IXML_MAJ}
 					CACHE STRING "Version of libixml" FORCE
 				)
 				message(
@@ -189,7 +189,7 @@ if(NOT PUPNP_VERSION_STRING)
 						FORCE
 				)
 				set(UPNP_SOVERSION_STRING
-					${UPNP_MAJ}.${CMAKE_MATCH_3}.${CMAKE_MATCH_2}
+					${UPNP_MAJ}
 					CACHE STRING "Version of libupnp" FORCE
 				)
 				message(
