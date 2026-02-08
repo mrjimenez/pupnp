@@ -1,22 +1,25 @@
 *******************************************************************************
-Version "1.14.27"
+Version 1.14.27
 *******************************************************************************
 
-
+- Fix OmniOS build when using POSIX compliant asctime_r by @mill1000 in #522
+- remove asctime_r and gmtime_r by @neheb in #523
+- cmake: link to libnsl and libsocket for SunOS by @neheb in #524
 
 *******************************************************************************
 Version 1.14.26
 *******************************************************************************
 
-	- bugfix-skip-init-on-VPN-adaptors by @ss1969 in #500
-	- readFromSSDPSocket: Don't return error when sockets receive zero length packet by @mill1000 in #501
-	- Fix warning on Mac compilation by @mrjimenez in #503
-	- shutdown sockets in finish routine by @ss1969 in #504
-	- Fix segfault on ixml, thanks to Harrison Green (hgarrereyn) #506
-	- Crash in ixml element set attribute node ns by @mrjimenez in #507
-	- Add another test to ixml by @mrjimenez in #509
-	- fix and add omnios CI by @neheb in #511
-	- cmake: add missing file in Windows compilation by @robUx4 in #518
+- bugfix-skip-init-on-VPN-adaptors by @ss1969 in #500
+- readFromSSDPSocket: Don't return error when sockets receive zero length packet
+  by @mill1000 in #501
+- Fix warning on Mac compilation by @mrjimenez in #503
+- shutdown sockets in finish routine by @ss1969 in #504
+- Fix segfault on ixml, thanks to Harrison Green (hgarrereyn) #506
+- Crash in ixml element set attribute node ns by @mrjimenez in #507
+- Add another test to ixml by @mrjimenez in #509
+- fix and add omnios CI by @neheb in #511
+- cmake: add missing file in Windows compilation by @robUx4 in #518
 
 *******************************************************************************
 Version 1.14.25
