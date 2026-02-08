@@ -1,12 +1,12 @@
 if(NOT PUPNP_VERSION_STRING)
-	file(GLOB_RECURSE MACROFILES ${CMAKE_CURRENT_SOURCE_DIR}/ *.m4)
+	file(GLOB_RECURSE MACRO_FILES ${CMAKE_CURRENT_SOURCE_DIR}/ *.m4)
 
-	list(APPEND MACROFILES ${CMAKE_CURRENT_SOURCE_DIR}/configure.ac)
+	list(APPEND MACRO_FILES ${CMAKE_CURRENT_SOURCE_DIR}/configure.ac)
 	list(APPEND WRITTEN_VARS DEBUG)
 	list(APPEND WRITTEN_VARS NDEBUG)
 
-	foreach(MACROFILE ${MACROFILES})
-		file(STRINGS ${MACROFILE} configure)
+	foreach(MACRO_FILE ${MACRO_FILES})
+		file(STRINGS ${MACRO_FILE} configure)
 		file(REMOVE ${CMAKE_CURRENT_BINARY_DIR}/autoconfig.h.cm)
 
 		foreach(line ${configure})
@@ -61,14 +61,14 @@ if(NOT PUPNP_VERSION_STRING)
 					continue()
 				endif()
 
-				string(SUBSTRING ${CMAKE_MATCH_2} 0 1 FIRSTCHAR)
+				string(SUBSTRING ${CMAKE_MATCH_2} 0 1 FIRST_CHAR)
 				string(STRIP ${CMAKE_MATCH_3} ${CMAKE_MATCH_3})
 				file(APPEND
 					${CMAKE_CURRENT_BINARY_DIR}/autoconfig.h.cm
 					"/* ${CMAKE_MATCH_3} */\n"
 				)
 
-				if(FIRSTCHAR STREQUAL "\"")
+				if(FIRST_CHAR STREQUAL "\"")
 					file(
 						APPEND
 						${CMAKE_CURRENT_BINARY_DIR}/autoconfig.h.cm
