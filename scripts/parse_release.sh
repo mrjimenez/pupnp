@@ -27,19 +27,19 @@ echo TAG_NAME="${TAG_NAME}"
 parsed_release="${TAG_NAME#release-}"
 parsed_prefix="${parsed_release%.*}"
 
-current_version="${parsed_release%.*.*}"
-current_version=$((10#$current_version))
-
-current_major="${parsed_release#*.}"
-current_major="${current_major%.*}"
+current_major="${parsed_release%.*.*}"
 current_major=$((10#$current_major))
 
-current_minor="${TAG_NAME##*.}"
+current_minor="${parsed_release#*.}"
+current_minor="${current_minor%.*}"
 current_minor=$((10#$current_minor))
 
-next_minor=$((current_minor + 1))
-curr_release=${current_version}.${current_major}.${current_minor}
-next_release=${current_version}.${current_major}.${next_minor}
+current_patch="${TAG_NAME##*.}"
+current_patch=$((10#$current_patch))
+
+next_patch=$((current_patch + 1))
+curr_release=${current_major}.${current_minor}.${current_patch}
+next_release=${current_major}.${current_minor}.${next_patch}
 
 # Test if Github stuff is possible inside a script
 
@@ -59,10 +59,10 @@ next_release=${current_version}.${current_major}.${next_minor}
 if [[ $DEBUG != n ]]; then
 	echo "Parsed  release is '${parsed_release}'"
 	echo "Parsed  prefix  is '${parsed_prefix}'"
-	echo "Current version is '${current_version}'"
 	echo "Current major   is '${current_major}'"
 	echo "Current minor   is '${current_minor}'"
-	echo "Next    minor   is '${next_minor}'"
+	echo "Current patch   is '${current_patch}'"
+	echo "Next    patch   is '${next_patch}'"
 	echo "Current release is '${curr_release}'"
 	echo "Next    release is '${next_release}'"
 
@@ -73,10 +73,10 @@ if [[ $DEBUG != n ]]; then
 	TAG_NAME=release-0010.020.030
 	Parsed  release is '0010.020.030'
 	Parsed  prefix  is '0010.020'
-	Current version is '10'
-	Current major   is '20'
-	Current minor   is '30'
-	Next    minor   is '31'
+	Current major   is '10'
+	Current minor   is '20'
+	Current patch   is '30'
+	Next    patch   is '31'
 	Current release is '10.20.30'
 	Next    release is '10.20.31'
 	COMMENT
@@ -89,14 +89,14 @@ if false; then
 	#
 	# Parse the tag name
 	prefix=$(echo "${TAG_NAME}" | sed -E 's/release-([0-9]+)\.([0-9]+)\.([0-9]+)/\1.\2/')
-	minor=$(echo  "${TAG_NAME}" | sed -E 's/release-([0-9]+)\.([0-9]+)\.([0-9]+)/\3/')
+	patch=$(echo  "${TAG_NAME}" | sed -E 's/release-([0-9]+)\.([0-9]+)\.([0-9]+)/\3/')
 	#
-	# Increment the minor
-	next_minor=$((minor+1))
+	# Increment the patch
+	next_patch=$((patch+1))
 	#
 	# Build the release numbers
-	curr_release="${prefix}.${minor}"
-	next_release="${prefix}.${next_minor}"
+	curr_release="${prefix}.${patch}"
+	next_release="${prefix}.${next_patch}"
 fi
 
 #
