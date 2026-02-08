@@ -32,6 +32,7 @@ jobs:
           prepare: |
             pkg install cmake gcc14 make
           run: |
+            set -e
             cmake \
             -S . \
             -B build \
@@ -47,7 +48,7 @@ jobs:
             ctest --output-on-failure
             RET_CODE=$?
             echo "ctest returned status $RET_CODE"
-            [[ $RET_CODE -ne 0 ]] && exit $RET_CODE
+            #[[ $RET_CODE -ne 0 ]] && exit $RET_CODE
             cd ..
             cmake -DBUILD_DIR=build -P cmake/post-test.cmake
             cmake --install build --config ${{matrix.conf}}
