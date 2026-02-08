@@ -14,8 +14,8 @@ LDADD = \
 	libupnp.la \
 	$(top_builddir)/ixml/libixml.la
 
-
 upnpincludedir = $(includedir)/upnp
+
 upnpinclude_HEADERS = \
         inc/UpnpActionComplete.h \
 	inc/UpnpActionRequest.h \
@@ -42,7 +42,6 @@ nodist_upnpinclude_HEADERS = inc/upnpconfig.h
 if ENABLE_TOOLS
 upnpinclude_HEADERS += inc/upnptools.h 
 endif
-
 
 lib_LTLIBRARIES = libupnp.la
 
@@ -177,7 +176,6 @@ else
 AM_CPPFLAGS         += -DNDEBUG
 endif
 
-
 # uuid
 if ENABLE_UUID
 libupnp_la_SOURCES += \
@@ -186,10 +184,8 @@ libupnp_la_SOURCES += \
 	src/uuid/uuid.c
 endif
 
-
 # urlconfig
 libupnp_la_SOURCES += src/urlconfig/urlconfig.c
-
 
 if WINDOWS
 # inet_pton (needed on Win32, compiles to nothing elsewhere)
@@ -198,7 +194,6 @@ libupnp_la_SOURCES += \
 	src/inc/inet_pton.h
 endif
 
-
 # check / distcheck tests
 check_PROGRAMS = test_init test_url test_log test_list
 TESTS = test_init test_url test_log test_list
@@ -206,7 +201,6 @@ test_init_SOURCES = test/test_init.c
 test_url_SOURCES = test/test_url.c
 test_log_SOURCES = test/test_log.c
 test_list_SOURCES = test/test_list.c
-
 
 EXTRA_DIST = \
 	m4/libupnp.m4 \

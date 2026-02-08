@@ -47,7 +47,6 @@ EXTRA_DIST = \
 	libupnp.pc.in \
 	libupnp.spec
 
-
 # This variable must have 'exec' in its name, in order to be installed 
 # by 'install-exec' target (instead of default 'install-data')
 pkgconfigexecdir = $(libdir)/pkgconfig
