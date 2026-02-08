@@ -20,9 +20,11 @@ EXTRA_DIST = \
 	cmake/options.cmake \
 	cmake/post-test.cmake \
 	cmake/test-functions.cmake \
+	docs/Doxyfile \
 	fuzzer/FuzzIxml.c \
 	fuzzer/build.sh \
 	fuzzer/CMakeLists.txt \
+	fuzzer/readme.md \
 	gtest/README.md \
 	gtest/CMakeLists.txt \
 	gtest/tools \
@@ -34,6 +36,10 @@ EXTRA_DIST = \
 	gtest/test_template.cpp \
 	gtest/test_upnpapi.cpp \
 	gtest/TODO \
+	scripts/find_out_bz2_name.sh \
+	scripts/home_keeping.sh \
+	scripts/parse_release.sh \
+	scripts/restore_pupnp_files.sh \
 	IXML.cmake.in \
 	UPNP.cmake.in \
 	ixml/CMakeLists.txt \
@@ -43,9 +49,9 @@ EXTRA_DIST = \
 	upnp/sample/CMakeLists.txt \
 	upnp/inc/upnpconfig.h.cm \
 	upnp/sample/common/config_sample.h.cm \
-	docs/Doxyfile \
 	libupnp.pc.in \
-	libupnp.spec
+	libupnp.spec \
+	.gitignore
 
 # This variable must have 'exec' in its name, in order to be installed 
 # by 'install-exec' target (instead of default 'install-data')
