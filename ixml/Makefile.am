@@ -45,15 +45,23 @@ libixml_la_SOURCES	= \
 			src/nodeList.c
 
 upnpincludedir		= $(includedir)/upnp
+
 upnpinclude_HEADERS	= \
 			inc/ixml.h \
 			inc/ixmldebug.h \
 			inc/posix_overwrites.h
 
-check_PROGRAMS          = test_document
-TESTS                   = test/test_document.sh
+check_PROGRAMS          = \
+			test_document \
+			poc_gh_506
+
+TESTS                   = \
+			test/test_document.sh \
+			poc_gh_506
 
 test_document_SOURCES 	= test/test_document.c
+
+poc_gh_506_SOURCES      = test/poc_gh_506.c
 
 EXTRA_DIST		= test/test_document.sh test/testdata
 
