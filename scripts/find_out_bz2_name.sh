@@ -42,7 +42,6 @@ if [[ -z "${bz2_name}" ]]; then
 	echo "Error: bz2_name is empty"
 	exit 1
 fi
-tar jcf "${bz2_name}" ./*
 
 # Save in the environment
 echo "bz2_name=${bz2_name}" >> "$GITHUB_ENV"
