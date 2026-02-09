@@ -12,7 +12,7 @@ function compile {
 	echo "done!"
 }
 
-function movefile {
+function move_file {
 	local FILE=$1
 	DESTINATION=$2
 	echo -n "Moving ${FILE} to $DESTINATION ... "
@@ -56,17 +56,17 @@ rm ./*.o
 
 echo
 for FILE in "${FILES_API[@]}"; do
-	movefile "$FILE".h ../inc
+	move_file "$FILE".h ../inc
 done
 
 for FILE in "${FILES_API[@]}"; do
-	movefile "$FILE".c ../src/api
+	move_file "$FILE".c ../src/api
 done
 
 FILE=${FILES_OTHERS[0]}
-movefile "$FILE".h ../src/inc
-movefile "$FILE".c ../src/genlib/client_table
+move_file "$FILE".h ../src/inc
+move_file "$FILE".c ../src/genlib/client_table
 
 FILE=${FILES_OTHERS[1]}
-movefile "$FILE".h ../src/ssdp
-movefile "$FILE".c ../src/ssdp
+move_file "$FILE".h ../src/ssdp
+move_file "$FILE".c ../src/ssdp
