@@ -42,20 +42,17 @@
 #include "httpreadwrite.h"
 
 #include "UpnpExtraHeaders.h"
-#include "UpnpFileInfo.h"
 #include "UpnpInet.h"
-#include "UpnpIntTypes.h"
-#include "UpnpStdInt.h"
 #include "membuffer.h"
 #include "sock.h"
 #include "statcodes.h"
-#include "unixutil.h"
 #include "upnp.h"
 #include "upnpapi.h"
 #include "uri.h"
 #include "webserver.h"
 
 #include <assert.h>
+#include <inttypes.h>
 #include <stdarg.h>
 #include <string.h>
 
@@ -261,11 +258,11 @@ int http_FixUrl(uri_type *url, uri_type *fixed_url)
 	return UPNP_E_SUCCESS;
 }
 
-int http_FixStrUrl(const char *urlstr, size_t urlstrlen, uri_type *fixed_url)
+int http_FixStrUrl(const char *url_str, size_t url_str_len, uri_type *fixed_url)
 {
 	uri_type url;
 
-	if (parse_uri(urlstr, urlstrlen, &url) != HTTP_SUCCESS) {
+	if (parse_uri(url_str, url_str_len, &url) != HTTP_SUCCESS) {
 		return UPNP_E_INVALID_URL;
 	}
 
@@ -289,21 +286,22 @@ int http_FixStrUrl(const char *urlstr, size_t urlstrlen, uri_type *fixed_url)
  ************************************************************************/
 SOCKET http_Connect(uri_type *destination_url, uri_type *url)
 {
-	SOCKET connfd;
+	SOCKET http_socket;
 	socklen_t sockaddr_len;
 	int ret_connect;
 	char errorBuffer[ERROR_BUFFER_LEN];
 
 	http_FixUrl(destination_url, url);
 
-	connfd = socket((int)url->hostport.IPaddress.ss_family, SOCK_STREAM, 0);
-	if (connfd == INVALID_SOCKET) {
+	http_socket =
+		socket((int)url->hostport.IPaddress.ss_family, SOCK_STREAM, 0);
+	if (http_socket == INVALID_SOCKET) {
 		return (SOCKET)(UPNP_E_OUTOF_SOCKET);
 	}
 	sockaddr_len = (socklen_t)(url->hostport.IPaddress.ss_family == AF_INET6
 					   ? sizeof(struct sockaddr_in6)
 					   : sizeof(struct sockaddr_in));
-	ret_connect = private_connect(connfd,
+	ret_connect = private_connect(http_socket,
 		(struct sockaddr *)&url->hostport.IPaddress,
 		sockaddr_len);
 	if (ret_connect == -1) {
@@ -315,7 +313,7 @@ SOCKET http_Connect(uri_type *destination_url, uri_type *url)
 			"connect error: %d\n",
 			WSAGetLastError());
 #endif
-		if (shutdown(connfd, SD_BOTH) == -1) {
+		if (shutdown(http_socket, SD_BOTH) == -1) {
 			strerror_r(errno, errorBuffer, ERROR_BUFFER_LEN);
 			UpnpPrintf(UPNP_INFO,
 				HTTP,
@@ -324,11 +322,11 @@ SOCKET http_Connect(uri_type *destination_url, uri_type *url)
 				"Error in shutdown: %s\n",
 				errorBuffer);
 		}
-		UpnpCloseSocket(connfd);
+		UpnpCloseSocket(http_socket);
 		return (SOCKET)(UPNP_E_SOCKET_CONNECT);
 	}
 
-	return connfd;
+	return http_socket;
 }
 
 /*!
@@ -336,7 +334,7 @@ SOCKET http_Connect(uri_type *destination_url, uri_type *url)
  * modify the parser objects buffer.
  *
  * If an error is reported while parsing the data, the error code is passed in
- * the http_errr_code parameter.
+ * the http_error_code parameter.
  *
  * Parameters:
  *	IN SOCKINFO *info;			Socket information object
@@ -728,7 +726,7 @@ ExitFunction:
  *	IN size_t request_length;	Length of the request
  *	IN http_method_t req_method;	HTTP Request method
  *	IN int timeout_secs;		time out value
- *	OUT http_parser_t* response;	Parser object to receive the repsonse
+ *	OUT http_parser_t* response;	Parser object to receive the response
  *
  * Description:
  *	Initiates socket, connects to the destination, sends a
@@ -801,7 +799,7 @@ end_function:
  *	IN const char* url_str;	String as a URL
  *	IN int timeout_secs;	time out value
  *	OUT char** document;	buffer to store the document extracted
- *				from the donloaded message.
+ *				from the downloaded message.
  *	OUT int* doc_length;	length of the extracted document
  *	OUT char* content_type;	Type of content
  *
@@ -1086,12 +1084,12 @@ typedef struct HTTPCONNECTIONHANDLE
 /*!
  * \brief Parses already exiting data. If not complete reads more
  * data on the connected socket. The read data is then parsed. The
- * same methid is carried out for headers.
+ * same method is carried out for headers.
  *
  * \return integer:
  *	\li \c PARSE_OK - On Success
  *	\li \c PARSE_FAILURE - Failure to parse data correctly
- *	\li \c UPNP_E_BAD_HTTPMSG - Socker read() returns an error
+ *	\li \c UPNP_E_BAD_HTTPMSG - Socket read() returns an error
  */
 static int ReadResponseLineAndHeaders(
 	/*! Socket information object. */
@@ -1100,7 +1098,7 @@ static int ReadResponseLineAndHeaders(
 	http_parser_t *parser,
 	/*! Time out value. */
 	int *timeout_secs,
-	/*! HTTP errror code returned. */
+	/*! HTTP error code returned. */
 	int *http_error_code)
 {
 	parse_status_t status;
@@ -1211,7 +1209,7 @@ static int ReadResponseLineAndHeaders(
  *	Extracts information from the Handle to the HTTP get object.
  *
  * Return: int
- *	UPNP_E_SUCCESS		- On Sucess
+ *	UPNP_E_SUCCESS		- On Success
  *	UPNP_E_INVALID_PARAM	- Invalid Parameter
  ************************************************************************/
 int http_HttpGetProgress(void *Handle, size_t *length, size_t *total)
@@ -1397,8 +1395,8 @@ int http_WriteHttpRequest(void *Handle, char *buf, size_t *size, int timeout)
 
 int http_EndHttpRequest(void *Handle, int timeout)
 {
-	int retc = 0;
-	const char *zcrlf = "0\r\n\r\n";
+	int ret_code = 0;
+	const char *zero_cr_lf = "0\r\n\r\n";
 	http_connection_handle_t *handle = Handle;
 	if (!handle)
 		return UPNP_E_INVALID_PARAM;
@@ -1408,10 +1406,12 @@ int http_EndHttpRequest(void *Handle, int timeout)
 	handle->requestStarted = 0;
 	if (handle->contentLength == UPNP_USING_CHUNKED)
 		/*send last chunk */
-		retc = sock_write(
-			&handle->sock_info, zcrlf, strlen(zcrlf), &timeout);
+		ret_code = sock_write(&handle->sock_info,
+			zero_cr_lf,
+			strlen(zero_cr_lf),
+			&timeout);
 
-	return retc >= 0 ? UPNP_E_SUCCESS : UPNP_E_SOCKET_WRITE;
+	return ret_code >= 0 ? UPNP_E_SUCCESS : UPNP_E_SOCKET_WRITE;
 }
 
 int http_GetHttpResponse(void *Handle,
@@ -2001,7 +2001,7 @@ ExitFunction:
  * Parameters:
  *	IN int request_major_vers;	Request major version
  *	IN int request_minor_vers;	Request minor version
- *	OUT int* response_major_vers;	Response mojor version
+ *	OUT int* response_major_vers;	Response major version
  *	OUT int* response_minor_vers;	Response minor version
  *
  * Description:
@@ -2133,7 +2133,7 @@ int MakeGetMessageEx(const char *url_str,
  *
  * Return: int
  *	UPNP_E_SUCCESS		- On Success
- *	UPNP_E_INVALID_PARAM	- Invalid Paramters
+ *	UPNP_E_INVALID_PARAM	- Invalid Parameters
  *	UPNP_E_OUTOF_MEMORY
  *	UPNP_E_SOCKET_ERROR
  *	UPNP_E_BAD_RESPONSE
