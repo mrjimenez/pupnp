@@ -1,6 +1,6 @@
-Version: 1.14.30
+Version: 1.18.0
 Summary: Universal Plug and Play (UPnP) SDK
-Name: libupnp-1.14
+Name: libupnp-1.18
 Release: 1%{?dist}
 License: BSD
 Group: System Environment/Libraries
