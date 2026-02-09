@@ -50,13 +50,9 @@ extern "C" {
 
 #include "sample_util.h"
 
-#include "UpnpString.h"
 #include "upnp.h"
-#include "upnptools.h"
 
-#include <signal.h>
 #include <stdarg.h>
-#include <stdio.h>
 
 #define TV_SERVICE_SERVCOUNT 2
 #define TV_SERVICE_CONTROL 0
@@ -172,7 +168,7 @@ void TvStateUpdate(
 
 void TvCtrlPointHandleEvent(const char *, int, IXML_Document *);
 void TvCtrlPointHandleSubscribeUpdate(const char *, const Upnp_SID, int);
-int TvCtrlPointCallbackEventHandler(Upnp_EventType, const void *, void *);
+int TvCtrlPointCallbackEventHandler(Upnp_EventType, void *, void *);
 
 /*!
  * \brief Checks the advertisement each device in the global device list.

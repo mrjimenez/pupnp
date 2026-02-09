@@ -1357,13 +1357,13 @@ int TvDeviceDecreaseBrightness(
 }
 
 int TvDeviceCallbackEventHandler(
-	Upnp_EventType EventType, const void *Event, void *Cookie)
+	Upnp_EventType EventType, void *Event, void *Cookie)
 {
 	(void)Cookie;
 	switch (EventType) {
 	case UPNP_EVENT_SUBSCRIPTION_REQUEST:
 		TvDeviceHandleSubscriptionRequest(
-			(UpnpSubscriptionRequest *)Event);
+			(const UpnpSubscriptionRequest *)Event);
 		break;
 	case UPNP_CONTROL_GET_VAR_REQUEST:
 		TvDeviceHandleGetVarRequest((UpnpStateVarRequest *)Event);
@@ -1385,7 +1385,7 @@ int TvDeviceCallbackEventHandler(
 		break;
 	default:
 		SampleUtil_Print("Error in TvDeviceCallbackEventHandler: "
-				 "unknown event type %d\n",
+				 "unknown event type %u\n",
 			EventType);
 	}
 	/* Print a summary of the event received */

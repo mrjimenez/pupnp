@@ -38,7 +38,7 @@ UPNP_EXPORT_SPEC int SSDPResultData_assign(
 	SSDPResultData *p, const SSDPResultData *q);
 
 /*! SSDPResultData_get_Param */
-UPNP_EXPORT_SPEC const UpnpDiscovery *SSDPResultData_get_Param(
+UPNP_EXPORT_SPEC UpnpDiscovery *SSDPResultData_get_Param(
 	const SSDPResultData *p);
 /*! SSDPResultData_set_Param */
 UPNP_EXPORT_SPEC int SSDPResultData_set_Param(

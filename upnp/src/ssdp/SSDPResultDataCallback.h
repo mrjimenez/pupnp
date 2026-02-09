@@ -16,7 +16,7 @@
  */
 
 /*! */
-void SSDPResultData_Callback(const SSDPResultData *p);
+void SSDPResultData_Callback(SSDPResultData *p);
 
 /* @} SSDPlib */
 

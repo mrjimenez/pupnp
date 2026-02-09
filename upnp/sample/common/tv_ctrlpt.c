@@ -1036,7 +1036,7 @@ void TvCtrlPointHandleGetVar(
  *
  ********************************************************************************/
 int TvCtrlPointCallbackEventHandler(
-	Upnp_EventType EventType, const void *Event, void *Cookie)
+	Upnp_EventType EventType, void *Event, void *Cookie)
 {
 	int errCode = 0;
 	(void)Cookie;
