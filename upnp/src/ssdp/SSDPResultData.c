@@ -79,7 +79,7 @@ SSDPResultData *SSDPResultData_dup(const SSDPResultData *q)
 	return p;
 }
 
-UpnpDiscovery *SSDPResultData_get_Param(const SSDPResultData *p)
+const UpnpDiscovery *SSDPResultData_get_Param(const SSDPResultData *p)
 {
 	return p->m_Param;
 }

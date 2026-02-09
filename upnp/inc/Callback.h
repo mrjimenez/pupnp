@@ -146,7 +146,7 @@ typedef int (*Upnp_FunPtr)(
 	/*! [in] .*/
 	Upnp_EventType EventType,
 	/*! [in] .*/
-	void *Event,
+	const void *Event,
 	/*! [in] .*/
 	void *Cookie);
 

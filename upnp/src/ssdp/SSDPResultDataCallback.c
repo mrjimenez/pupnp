@@ -1,3 +1,4 @@
+
 /*!
  * \file
  *
@@ -6,11 +7,12 @@
  * \author Marcelo Roberto Jimenez
  */
 
-#include "SSDPResultDataCallback.h"
+#include "config.h"
 
 #include "SSDPResultData.h"
+#include "SSDPResultDataCallback.h"
 
-void SSDPResultData_Callback(SSDPResultData *p)
+void SSDPResultData_Callback(const SSDPResultData *p)
 {
 	Upnp_FunPtr callback = SSDPResultData_get_CtrlptCallback(p);
 	callback(UPNP_DISCOVERY_SEARCH_RESULT,
