@@ -1118,7 +1118,7 @@ static int ReadResponseLineAndHeaders(
 		break;
 	default:
 		/*error */
-		return status;
+		return (int)status;
 	}
 	while (!done) {
 		num_read = sock_read(info, buf, sizeof(buf), timeout_secs);
@@ -1142,26 +1142,28 @@ static int ReadResponseLineAndHeaders(
 				break;
 			default:
 				/*error */
-				return status;
+				return (int)status;
 			}
 		} else if (num_read == 0) {
 			/* partial msg */
 			*http_error_code = HTTP_BAD_REQUEST; /* or response */
 			return UPNP_E_BAD_HTTPMSG;
 		} else {
+			/* num_read is negative, this is an error code */
 			*http_error_code = parser->http_error_code;
 			return num_read;
 		}
 	}
 	status = parser_parse_headers(parser);
 	if ((status == (parse_status_t)PARSE_OK) &&
-		(parser->position == (parser_pos_t)POS_ENTITY))
+		(parser->position == (parser_pos_t)POS_ENTITY)) {
 		done = 1;
-	else if (status == (parse_status_t)PARSE_INCOMPLETE)
+	} else if (status == (parse_status_t)PARSE_INCOMPLETE) {
 		done = 0;
-	else
+	} else {
 		/*error */
-		return status;
+		return (int)status;
+	}
 	/*read headers */
 	while (!done) {
 		num_read = sock_read(info, buf, sizeof(buf), timeout_secs);
@@ -1183,7 +1185,7 @@ static int ReadResponseLineAndHeaders(
 				done = 0;
 			else
 				/*error */
-				return status;
+				return (int)status;
 		} else if (num_read == 0) {
 			/* partial msg */
 			*http_error_code = HTTP_BAD_REQUEST; /* or response */
@@ -1427,7 +1429,7 @@ int http_GetHttpResponse(void *Handle,
 	http_connection_handle_t *handle = Handle;
 	parse_status_t status;
 
-	status = ReadResponseLineAndHeaders(&handle->sock_info,
+	status = (parse_status_t)ReadResponseLineAndHeaders(&handle->sock_info,
 		&handle->response,
 		&timeout,
 		&http_error_code);

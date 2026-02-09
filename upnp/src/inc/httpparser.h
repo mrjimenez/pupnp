@@ -39,7 +39,6 @@
 
 #include "LinkedList.h"
 #include "membuffer.h"
-#include "upnputil.h"
 #include "uri.h"
 
 /* private types */
@@ -133,7 +132,7 @@ typedef enum
 #define HDR_USN 23
 #define HDR_USER_AGENT 24
 
-/* Adding new header difinition */
+/* Adding new header definition */
 #define HDR_ACCEPT 25
 #define HDR_ACCEPT_ENCODING 26
 #define HDR_ACCEPT_CHARSET 27
@@ -210,7 +209,7 @@ typedef struct
 	/*! entire raw message. */
 	membuffer msg;
 	/*! storage for url string. */
-	char *urlbuf;
+	char *url_buf;
 } http_message_t;
 
 typedef struct
@@ -220,7 +219,7 @@ typedef struct
 	 * contains the HTTP error code (4XX or 5XX). */
 	int http_error_code;
 	/*! read-only; this is set to 1 if a NOTIFY request has no
-	 * content-length. used to read valid sspd notify msg. */
+	 * content-length. used to read valid ssdp notify msg. */
 	int valid_ssdp_notify_hack;
 	/* private data -- don't touch. */
 	parser_pos_t position;
@@ -228,7 +227,7 @@ typedef struct
 	unsigned int content_length;
 	size_t chunk_size;
 	/*! offset in the the raw message buffer, which contains the message
-	 * body. preceding this are the headers of the messsage. */
+	 * body. preceding this are the headers of the message. */
 	size_t entity_start_position;
 	scanner_t scanner;
 } http_parser_t;
@@ -456,7 +455,7 @@ int raw_to_int(memptr *raw_value, int base);
  * Function: raw_find_str
  *
  * Parameters:
- *	IN memptr* raw_value ; Buffer containg the string
+ *	IN memptr* raw_value ; Buffer containing the string
  *	IN const char* str ;	Substring to be found
  *
  * Description: Find a substring from raw character string buffer
@@ -489,9 +488,9 @@ const char *method_to_str(http_method_t method);
 #ifdef DEBUG
 void print_http_headers(
 	/*! [in] HTTP Message object. */
-	http_message_t *hmsg);
+	http_message_t *h_msg);
 #else
-	#define print_http_headers(hmsg) \
+	#define print_http_headers(h_msg) \
 		do { \
 		} while (0)
 #endif

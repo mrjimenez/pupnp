@@ -34,9 +34,10 @@
  *	conversion functions
  ************************************************************************/
 
-#include "strintmap.h"
-#include "config.h"
+#include "config.h" /* IWYU pragma: keep */
+
 #include "membuffer.h"
+#include "strintmap.h"
 
 /************************************************************************
  *	Function :	map_str_to_int
