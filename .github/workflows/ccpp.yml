@@ -3,9 +3,11 @@ name: Build
 on:
   push:
     branches:
+      - "**"
       - "!no_ci-*"
   pull_request:
     branches:
+      - "**"
       - "!no_ci-*"
 
 #
