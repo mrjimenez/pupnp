@@ -42,9 +42,9 @@
  */
 
 #include "UpnpGlobal.h"
-#include "UpnpInet.h"
+#include "UpnpInet.h" /* IWYU pragma: keep */
 #include "ixml.h"
-#include "upnpconfig.h" // IWYU pragma: keep
+#include "upnpconfig.h" /* IWYU pragma: keep */
 
 /*
  * \todo Document the exact reason of these include files and solve this
@@ -317,7 +317,7 @@
 /*! \brief The operation was canceled.
  *
  * This error can be returned by any function that allows for external
- * cancelation.
+ * cancellation.
  */
 #define UPNP_E_CANCELED -210
 
@@ -537,8 +537,8 @@ extern "C" {
  *             failed for an unknown reason.
  *     \li \c UPNP_E_SOCKET_BIND: An error occurred binding a socket.
  *     \li \c UPNP_E_LISTEN: An error occurred listening to a socket.
- *     \li \c UPNP_E_OUTOF_SOCKET: An error ocurred creating a socket.
- *     \li \c UPNP_E_INTERNAL_ERROR: An internal error ocurred.
+ *     \li \c UPNP_E_OUTOF_SOCKET: An error occurred creating a socket.
+ *     \li \c UPNP_E_INTERNAL_ERROR: An internal error occurred.
  *     \li \c UPNP_E_INVALID_INTERFACE: IfName is invalid or does not
  *             have a valid IPv4 or IPv6 addresss configured.
  */
@@ -567,7 +567,7 @@ UPNP_EXPORT_SPEC int UpnpInit2(
 UPNP_EXPORT_SPEC int UpnpInitSslContext(
 	/*! If set to 1 initializes the OpenSSL library. Otherwise the
 	 * application is responsible for initializing it. If set to 1, then
-	 * OpenSSL is intialized
+	 * OpenSSL is initialized
 	 *  with all error strings, and all ciphers loaded. */
 	int initOpenSslLib,
 	/*! The SSL_METHOD to use to create the context. See OpenSSL docs
@@ -1022,7 +1022,7 @@ UPNP_EXPORT_SPEC int UpnpUnRegisterClient(
  * of this function is global to the SDK (= same as \b UpnpSetMaxContentLength).
  */
 UPNP_EXPORT_SPEC int UpnpSetContentLength(
-	/*! [in] The handle of the device instance for which the coincoming
+	/*! [in] The handle of the device instance for which the incoming
 	 * content length needs to be set. */
 	UpnpClient_Handle Hnd,
 	/*! [in] Permissible content length */
@@ -1098,7 +1098,7 @@ UPNP_EXPORT_SPEC int UpnpSearchAsync(
 	int Mx,
 	/*! The search target as defined in the UPnP Device Architecture v1.0
 	 * specification. */
-	const char *TTarget_constarget_const,
+	const char *Target_const,
 	/*! The user data to pass when the callback function is invoked. */
 	const void *Cookie_const);
 
@@ -1423,7 +1423,7 @@ UPNP_EXPORT_SPEC int UpnpSendActionExAsync(
 
 /*!
  * \brief Accepts a subscription request and sends out the current state of the
- * eventable variables for a service.
+ * event table variables for a service.
  *
  * The device application should call this function when it receives a
  * \c UPNP_EVENT_SUBSCRIPTION_REQUEST callback.
@@ -1468,7 +1468,7 @@ UPNP_EXPORT_SPEC int UpnpAcceptSubscription(
  * \brief Similar to \b UpnpAcceptSubscription() except that it takes a DOM
  * document for the variables to event rather than an array of strings.
  *
- * This function is sychronous and generates no callbacks.
+ * This function is synchronous and generates no callbacks.
  *
  * This function can be called during the execution of a callback function.
  *
@@ -1584,7 +1584,7 @@ UPNP_EXPORT_SPEC int UpnpNotifyExt(
  *     \li \c UPNP_E_INVALID_PARAM: \b Timeout is not a valid pointer.
  *     \li \c UPNP_E_INVALID_SID: The SID being passed to this function
  *             is not a valid subscription ID.
- *     \li \c UPNP_E_NETWORK_ERROR: A network error occured.
+ *     \li \c UPNP_E_NETWORK_ERROR: A network error occurred.
  *     \li \c UPNP_E_SOCKET_WRITE: An error or timeout occurred writing
  *             to a socket.
  *     \li \c UPNP_E_SOCKET_READ: An error or timeout occurred reading
@@ -1631,7 +1631,7 @@ UPNP_EXPORT_SPEC int UpnpRenewSubscription(
  *             but is not \c UPNP_INFINITE.
  *     \li \c UPNP_E_OUTOF_MEMORY: Insufficient resources exist to
  *             complete this operation.
- *     \li \c UPNP_E_NETWORK_ERROR: A network error occured (returned in
+ *     \li \c UPNP_E_NETWORK_ERROR: A network error occurred (returned in
  *             the <b>UpnpEventSubscribe.ErrCode</b> field as part of the
  *             callback).
  *     \li \c UPNP_E_SOCKET_WRITE: An error or timeout occurred writing
@@ -1727,7 +1727,7 @@ UPNP_EXPORT_SPEC int UpnpSetMaxSubscriptionTimeOut(
  *     \li \c UPNP_E_INVALID_URL: \b PublisherUrl is not a valid URL.
  *     \li \c UPNP_E_INVALID_PARAM: \b Timeout is not a valid pointer
  *             or \b SubsId or \b PublisherUrl is \c NULL.
- *     \li \c UPNP_E_NETWORK_ERROR: A network error occured.
+ *     \li \c UPNP_E_NETWORK_ERROR: A network error occurred.
  *     \li \c UPNP_E_SOCKET_WRITE: An error or timeout occurred writing
  *             to a socket.
  *     \li \c UPNP_E_SOCKET_READ: An error or timeout occurred reading
@@ -1776,7 +1776,7 @@ UPNP_EXPORT_SPEC int UpnpSubscribe(
  *              \b PublisherUrl is not a valid pointer.
  *      \li \c UPNP_E_OUTOF_MEMORY: Insufficient resources exist to
  *              complete this operation.
- *      \li \c UPNP_E_NETWORK_ERROR: A network error occured (returned in
+ *      \li \c UPNP_E_NETWORK_ERROR: A network error occurred (returned in
  *              the <b>UpnpEventSubscribe.ErrCode</b> field as part of the
  *              callback).
  *      \li \c UPNP_E_SOCKET_WRITE: An error or timeout occurred writing
@@ -1828,7 +1828,7 @@ UPNP_EXPORT_SPEC int UpnpSubscribeAsync(
  *             point handle.
  *     \li \c UPNP_E_INVALID_SID: The \b SubsId is not a valid
  *             subscription ID.
- *     \li \c UPNP_E_NETWORK_ERROR: A network error occured.
+ *     \li \c UPNP_E_NETWORK_ERROR: A network error occurred.
  *     \li \c UPNP_E_SOCKET_WRITE: An error or timeout occurred writing
  *             to a socket.
  *     \li \c UPNP_E_SOCKET_READ: An error or timeout occurred reading
@@ -1836,7 +1836,7 @@ UPNP_EXPORT_SPEC int UpnpSubscribeAsync(
  *     \li \c UPNP_E_SOCKET_BIND: An error occurred binding a socket.
  *     \li \c UPNP_E_SOCKET_CONNECT: An error occurred connecting to
  *             \b PublisherUrl.
- *     \li \c UPNP_E_OUTOF_SOCKET: An error ocurred creating a socket.
+ *     \li \c UPNP_E_OUTOF_SOCKET: An error occurred creating a socket.
  *     \li \c UPNP_E_BAD_RESPONSE: An error occurred in response from
  *             the publisher.
  *     \li \c UPNP_E_UNSUBSCRIBE_UNACCEPTED: The publisher refused
@@ -1872,7 +1872,7 @@ UPNP_EXPORT_SPEC int UpnpUnSubscribe(
  *             function pointer.
  *     \li \c UPNP_E_OUTOF_MEMORY: Insufficient resources exist to
  *             complete this operation.
- *     \li \c UPNP_E_NETWORK_ERROR: A network error occured (returned in
+ *     \li \c UPNP_E_NETWORK_ERROR: A network error occurred (returned in
  *             the <b>UpnpEventSubscribe.ErrCode</b> field as part of the
  *             callback).
  *     \li \c UPNP_E_SOCKET_WRITE: An error or timeout occurred writing
@@ -2214,7 +2214,7 @@ UPNP_EXPORT_SPEC int UpnpCloseHttpGet(
  *              URL.
  *      \li \c UPNP_E_OUTOF_MEMORY: Insufficient resources exist to
  *              download this file.
- *      \li \c UPNP_E_SOCKET_ERROR: Error occured allocating a socket and
+ *      \li \c UPNP_E_SOCKET_ERROR: Error occurred allocating a socket and
  *		resources or an error occurred binding a socket.
  *      \li \c UPNP_E_SOCKET_WRITE: An error or timeout occurred writing
  *              to a socket.
@@ -2227,7 +2227,7 @@ UPNP_EXPORT_SPEC int UpnpOpenHttpPost(
 	/*! [in] The URL in which to send the POST request. */
 	const char *url,
 	/*! [in,out] A pointer in which to store the handle for this connection.
-	 * This handle is required for futher operations over this connection.
+	 * This handle is required for further operations over this connection.
 	 */
 	void **handle,
 	/*! [in] A buffer to store the media type of content being sent. Can be
@@ -2305,7 +2305,7 @@ UPNP_EXPORT_SPEC int UpnpCloseHttpPost(
  *              URL.
  *      \li \c UPNP_E_OUTOF_MEMORY: Insufficient resources exist to
  *              download this file.
- *      \li \c UPNP_E_SOCKET_ERROR: Error occured allocating a socket and
+ *      \li \c UPNP_E_SOCKET_ERROR: Error occurred allocating a socket and
  *		resources or an error occurred binding a socket.
  *      \li \c UPNP_E_SOCKET_WRITE: An error or timeout occurred writing
  *              to a socket.
@@ -2319,7 +2319,7 @@ UPNP_EXPORT_SPEC int UpnpOpenHttpConnection(
 	   connection. */
 	const char *url,
 	/*! [in,out] A pointer in which to store the handle for this connection.
-	 * This handle is required for futher operations over this connection.
+	 * This handle is required for further operations over this connection.
 	 */
 	void **handle,
 	/*! [in] The time out value sent with the request during which a
@@ -2343,7 +2343,7 @@ UPNP_EXPORT_SPEC int UpnpOpenHttpConnection(
  *              URL.
  *      \li \c UPNP_E_OUTOF_MEMORY: Insufficient resources exist to
  *              download this file.
- *      \li \c UPNP_E_SOCKET_ERROR: Error occured allocating a socket and
+ *      \li \c UPNP_E_SOCKET_ERROR: Error occurred allocating a socket and
  *		resources or an error occurred binding a socket.
  *      \li \c UPNP_E_SOCKET_WRITE: An error or timeout occurred writing
  *              to a socket.
@@ -2414,7 +2414,7 @@ UPNP_EXPORT_SPEC int UpnpWriteHttpRequest(
  *      \li \c UPNP_E_INVALID_PARAM: \b handle is not a valid pointer.
  *      \li \c UPNP_E_OUTOF_MEMORY: Insufficient resources exist to
  *              download this file.
- *      \li \c UPNP_E_SOCKET_ERROR: Error occured allocating a socket and
+ *      \li \c UPNP_E_SOCKET_ERROR: Error occurred allocating a socket and
  *		resources or an error occurred binding a socket.
  *      \li \c UPNP_E_SOCKET_WRITE: An error or timeout occurred writing
  *              to a socket.
@@ -2708,7 +2708,7 @@ typedef int (*VDCallback_Seek)(
 	/*! [in] The handle of the file to move the file pointer. */
 	UpnpWebFileHandle fileHnd,
 	/*! [in] The number of bytes to move in the file.  Positive values
-	 * move foward and negative values move backward.  Note that
+	 * move forward and negative values move backward.  Note that
 	 * this must be positive if the \b origin is \c SEEK_SET. */
 	off_t offset,
 	/*! [in] The position to move relative to.  It can be \c SEEK_CUR

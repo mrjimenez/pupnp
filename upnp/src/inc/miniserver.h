@@ -36,7 +36,8 @@
  * \file
  */
 
-#include "UpnpStdInt.h"
+#include "UpnpStdInt.h" /* IWYU pragma: keep */
+
 #include "httpparser.h"
 #include "sock.h"
 
@@ -52,12 +53,13 @@ typedef struct MServerSockArray
 	SOCKET miniServerSock6UlaGua;
 	/*! Socket for stopping miniserver */
 	SOCKET miniServerStopSock;
-	/*! IPv4 SSDP Socket for incoming advertisments and search requests. */
+	/*! IPv4 SSDP Socket for incoming advertisements and search requests. */
 	SOCKET ssdpSock4;
-	/*! IPv6 LLA SSDP Socket for incoming advertisments and search requests.
+	/*! IPv6 LLA SSDP Socket for incoming advertisements and search
+	 * requests.
 	 */
 	SOCKET ssdpSock6;
-	/*! IPv6 ULA or GUA SSDP Socket for incoming advertisments and search
+	/*! IPv6 ULA or GUA SSDP Socket for incoming advertisements and search
 	 * requests. */
 	SOCKET ssdpSock6UlaGua;
 	/* ! . */

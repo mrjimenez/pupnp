@@ -1062,7 +1062,7 @@ exit_function:
 #endif /* INCLUDE_DEVICE_APIS */
 
 /*!
- * \brief Fills the sockadr_in with miniserver information.
+ * \brief Fills the sockaddr_in with miniserver information.
  */
 static int GetDescDocumentAndURL(
 	/* [in] pointer to server address structure. */
@@ -1691,7 +1691,7 @@ static int GetNameForAlias(
 }
 
 /*!
- * \brief Fill the sockadr with IPv4 miniserver information.
+ * \brief Fill the sockaddr with IPv4 miniserver information.
  */
 static void get_server_addr(
 	/*! [out] pointer to server address structure. */
@@ -1707,7 +1707,7 @@ static void get_server_addr(
 }
 
 /*!
- * \brief Fill the sockadr with IPv6 miniserver information.
+ * \brief Fill the sockaddr with IPv6 miniserver information.
  */
 static void get_server_addr6(
 	/*! [out] pointer to server address structure. */
