@@ -1,4 +1,4 @@
-Version: 1.18.1
+Version: 1.18.2
 Summary: Universal Plug and Play (UPnP) SDK
 Name: libupnp-1.18
 Release: 1%{?dist}
