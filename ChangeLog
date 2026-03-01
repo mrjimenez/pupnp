@@ -2,7 +2,8 @@
 Version 1.18.1
 *******************************************************************************
 
-
+- Fix #529: LNK2019 on MSVC when build with UPNP_ENABLE_WEBSERVER=OFF
+- Fix #517: Crash when mixing ns and non-ns attributes during freeing
 
 *******************************************************************************
 Version 1.18.0
