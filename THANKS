@@ -1,5 +1,4 @@
-
-libupnp was originally written by Intel Corporation.
+# libupnp was originally written by Intel Corporation
 
 Many people further contributed to libupnp by reporting problems,
 suggesting various improvements or submitting actual code.
@@ -46,7 +45,7 @@ exempt of errors.
 - Ivan Romanov (ivanromanov)
 - James Cowgill (jcowgill at GitHub)
 - Jean-Francois Dockes (medoc, medoc92)
-- Jim Broadus <jbroadus at gmail dot com>
+- Jim Broadus (jbroadus at gmail dot com)
 - Jiri Zouhar
 - John Dennis
 - John Smith (jsmith-mygithub at Github)
