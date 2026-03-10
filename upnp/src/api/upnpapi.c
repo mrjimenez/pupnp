@@ -347,7 +347,7 @@ static int UpnpInitMutexes(void)
 }
 
 /*!
- * \brief Initializes the global threadm pools used by the UPnP SDK.
+ * \brief Initializes the global thread pools used by the UPnP SDK.
  *
  * \return UPNP_E_SUCCESS on success or UPNP_E_INIT_FAILED if a mutex could not
  * 	be initialized.

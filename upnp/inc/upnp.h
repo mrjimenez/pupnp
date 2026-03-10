@@ -129,7 +129,7 @@
 /*!
  * \brief The SDK has already been initialized.
  *
- * The SDK needs to be initialied only once per process. Any additional
+ * The SDK needs to be initialized only once per process. Any additional
  * initialization attempts simply return this error with no other ill effects.
  */
 #define UPNP_E_INIT -105
