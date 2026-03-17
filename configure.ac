@@ -15,10 +15,10 @@ dnl # of the libraries need to be updated whenever there is a change released:
 dnl # "current:revision:age" (this is NOT the same as the package version),
 dnl # where:
 dnl #
-dnl # 	- library code modified:		revision++
-dnl # 	- interfaces changed/added/removed:	current++ and revision=0
-dnl # 	- interfaces added: 			age++
-dnl # 	- interfaces removed or changed:	age=0
+dnl # 	- library code modified:            revision++
+dnl # 	- interfaces changed/added/removed: current++ and revision=0
+dnl # 	- interfaces added:                 age++
+dnl # 	- interfaces removed or changed:    age=0
 dnl #
 dnl # *please update only once, before a formal release, not for each change*
 dnl #
@@ -32,23 +32,6 @@ dnl # "current:revision:age"
 dnl #
 dnl # - Code has changed in upnp
 dnl #   revision: 2 -> 3
-dnl # - interfaces changed/added/removed in upnp
-dnl #   current: bbb_1_1 -> bbb_1_2
-dnl #   revision: ccc_1_1 -> 0
-dnl # - interfaces added in upnp
-dnl #   age: ddd_1_1 -> ddd_1_2
-dnl # - interfaces removed or changed in upnp
-dnl #   age: eee_1_1 -> 0
-dnl #
-dnl # - Code has changed in ixml
-dnl #   revision: aaa_2_1 -> aaa_2_2
-dnl # - interfaces changed/added/removed in ixml
-dnl #   current: bbb_1_1 -> bbb_1_2
-dnl #   revision: ccc_1_1 -> 0
-dnl # - interfaces added in ixml
-dnl #   age: ddd_1_1 -> ddd_1_2
-dnl # - interfaces removed or changed in ixml
-dnl #   age: eee_1_1 -> 0
 dnl #
 dnl #AC_SUBST([LT_VERSION_IXML], [12:8:1])
 dnl #AC_SUBST([LT_VERSION_UPNP], [20:3:0])
