@@ -31,7 +31,7 @@ dnl # Release 1.18.5
 dnl # "current:revision:age"
 dnl #
 dnl # - Code has changed in upnp
-dnl #   revision: aaa_1_1 -> aaa_1_2
+dnl #   revision: 4 -> 5
 dnl # - interfaces changed/added/removed in upnp
 dnl #   current: bbb_1_1 -> bbb_1_2
 dnl #   revision: ccc_1_1 -> 0
@@ -51,7 +51,7 @@ dnl # - interfaces removed or changed in ixml
 dnl #   age: eee_1_1 -> 0
 dnl #
 dnl #AC_SUBST([LT_VERSION_IXML], [12:8:1])
-dnl #AC_SUBST([LT_VERSION_UPNP], [20:4:0])
+dnl #AC_SUBST([LT_VERSION_UPNP], [20:5:0])
 dnl ############################################################################
 dnl # Release 1.18.4
 dnl # "current:revision:age"
