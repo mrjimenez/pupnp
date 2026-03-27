@@ -56,7 +56,7 @@ jobs:
       - name: Test
         run: |
           cd build
-          ctest --output-on-failure
+          ctest --output-on-failure --timeout 300
           cd ..
       - name: Debug output
         run: cmake -DBUILD_DIR=build -P cmake/post-test.cmake
@@ -89,7 +89,7 @@ jobs:
             ${{ env.cmake_extra_flags }}
             cmake --build build --config ${{matrix.conf}}
             cd build
-            ctest --output-on-failure
+            ctest --output-on-failure --timeout 300
             cd ..
             cmake -DBUILD_DIR=build -P cmake/post-test.cmake
             cmake --install build --config ${{matrix.conf}}
@@ -119,7 +119,7 @@ jobs:
       - name: Test
         run: |
           cd build
-          ctest --output-on-failure -C ${{ matrix.conf }}
+          ctest --output-on-failure -C ${{ matrix.conf }} --timeout 300
           cd ..
       - name: Debug output
         run: cmake -DBUILD_DIR=build -P cmake/post-test.cmake
@@ -174,7 +174,7 @@ jobs:
       - name: Test
         run: |
           cd build
-          ctest --output-on-failure -C ${{ matrix.conf }}
+          ctest --output-on-failure -C ${{ matrix.conf }} --timeout 300
           cd ..
       - name: Debug output
         run: cmake -DBUILD_DIR=build -P cmake/post-test.cmake
@@ -229,4 +229,4 @@ jobs:
         if: ${{ matrix.tool == 'cmake' }}
         run: |
           cd build
-          ctest --output-on-failure
+          ctest --output-on-failure --timeout 300
