@@ -27,6 +27,8 @@ env:
     -DUPNP_ENABLE_UNSPECIFIED_SERVER=ON
     -DUPNP_ENABLE_BLOCKING_TCP_CONNECTIONS=ON"
 
+  ctest_flags: "--output-on-failure --timeout 5"
+
 jobs:
   # Linux builds
   linux:
@@ -56,7 +58,7 @@ jobs:
       - name: Test
         run: |
           cd build
-          ctest --output-on-failure --timeout 300
+          ctest ${{ env.ctest_flags }} -C ${{ matrix.conf }}
           cd ..
       - name: Debug output
         run: cmake -DBUILD_DIR=build -P cmake/post-test.cmake
@@ -89,7 +91,7 @@ jobs:
             ${{ env.cmake_extra_flags }}
             cmake --build build --config ${{matrix.conf}}
             cd build
-            ctest --output-on-failure --timeout 300
+            ctest ${{ env.ctest_flags }} -C ${{ matrix.conf }}
             cd ..
             cmake -DBUILD_DIR=build -P cmake/post-test.cmake
             cmake --install build --config ${{matrix.conf}}
@@ -119,7 +121,7 @@ jobs:
       - name: Test
         run: |
           cd build
-          ctest --output-on-failure -C ${{ matrix.conf }} --timeout 300
+          ctest ${{ env.ctest_flags }} -C ${{ matrix.conf }}
           cd ..
       - name: Debug output
         run: cmake -DBUILD_DIR=build -P cmake/post-test.cmake
@@ -174,7 +176,7 @@ jobs:
       - name: Test
         run: |
           cd build
-          ctest --output-on-failure -C ${{ matrix.conf }} --timeout 300
+          ctest ${{ env.ctest_flags }} -C ${{ matrix.conf }}
           cd ..
       - name: Debug output
         run: cmake -DBUILD_DIR=build -P cmake/post-test.cmake
@@ -229,4 +231,4 @@ jobs:
         if: ${{ matrix.tool == 'cmake' }}
         run: |
           cd build
-          ctest --output-on-failure --timeout 300
+          ctest ${{ env.ctest_flags }}
