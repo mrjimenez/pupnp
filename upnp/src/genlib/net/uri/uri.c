@@ -450,7 +450,7 @@ static int parse_hostport(
  *
  * (e.g. "http:" -> scheme= "http").
  *
- * \note String MUST include ':' within the max charcters.
+ * \note String MUST include ':' within the max characters.
  *
  * \return
  */
