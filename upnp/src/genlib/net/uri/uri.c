@@ -405,6 +405,10 @@ static int parse_hostport(
 		while (*c != '\0' && isdigit(*c)) {
 			c++;
 		}
+		long port_l = strtol(srv_port, NULL, 10);
+		if (port_l <= 0 || port_l > 65535) {
+			return UPNP_E_INVALID_URL;
+		}
 		port = (unsigned short int)atoi(srv_port);
 		if (port == 0) {
 			/* Bad port number. */
