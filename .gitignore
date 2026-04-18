@@ -139,7 +139,7 @@ docs/doxygen
 *.trs
 *.log
 ixml/test_document
-ixml/poc_gh_506
+ixml/poc_gh_*
 upnp/test_init
 upnp/test_url
 upnp/test_list
