@@ -106,7 +106,7 @@ enum uriType
 #endif
 
 /*!
- * \brief Buffer used in parsinghttp messages, urls, etc. generally this simply
+ * \brief Buffer used in parsing http messages, urls, etc. generally this simply
  * holds a pointer into a larger array.
  */
 typedef struct TOKEN
