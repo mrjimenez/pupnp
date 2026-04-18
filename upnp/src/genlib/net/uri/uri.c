@@ -402,12 +402,14 @@ static int parse_hostport(
 	if (has_port == 1) {
 		/* Port is specified. */
 		srv_port = c;
-		while (*c != '\0' && isdigit(*c))
+		while (*c != '\0' && isdigit(*c)) {
 			c++;
+		}
 		port = (unsigned short int)atoi(srv_port);
-		if (port == 0)
+		if (port == 0) {
 			/* Bad port number. */
 			return UPNP_E_INVALID_URL;
+		}
 	} else
 		/* Port was not specified, use default port. */
 		port = defaultPort;
