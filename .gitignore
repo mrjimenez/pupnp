@@ -132,14 +132,11 @@ upnp/unittest/*.pp.c
 docs/doxygen
 
 # Testing
+ixml/test_*
+ixml/poc_gh_*
+upnp/test_*
 *.trs
 *.log
-ixml/test_document
-ixml/poc_gh_*
-upnp/test_init
-upnp/test_url
-upnp/test_list
-upnp/test_log
 
 upnp/generator/generator
 

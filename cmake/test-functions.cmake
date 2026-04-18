@@ -10,7 +10,7 @@ function(UPNP_addGTest testName sourceFile)
 		)
 	endif()
 
-	upnp_addtestexecutable(${testName} ${sourceFile})
+	UPNP_Add_Test_Executable(${testName} ${sourceFile})
 
 	if(UPNP_BUILD_SHARED)
 		if(agm_ADDITIONAL_INCLUDE_DIRS)
@@ -29,7 +29,7 @@ function(UPNP_addGTest testName sourceFile)
 		)
 
 		if(MSVC)
-			upnp_findtestenv(${testName} TEST_ENV)
+			UPNP_Find_Test_Env(${testName} TEST_ENV)
 
 			set_tests_properties(
 				${GTEST_${testName}} PROPERTIES ENVIRONMENT
@@ -37,7 +37,7 @@ function(UPNP_addGTest testName sourceFile)
 			)
 		endif()
 
-		upnp_findtestenv(${testName} TEST_ENV)
+		UPNP_Find_Test_Env(${testName} TEST_ENV)
 	endif()
 
 	if(UPNP_BUILD_STATIC)
@@ -58,7 +58,7 @@ function(UPNP_addGTest testName sourceFile)
 	endif()
 endfunction()
 
-function(UPNP_addTestExecutable testName sourceFile)
+function(UPNP_Add_Test_Executable testName sourceFile)
 	if(UPNP_BUILD_SHARED)
 		add_executable(${testName} ${sourceFile})
 		target_link_libraries(${testName} PRIVATE upnp_shared)
@@ -82,8 +82,8 @@ function(UPNP_addTestExecutable testName sourceFile)
 	endif()
 endfunction()
 
-function(UPNP_addUnitTest testName sourceFile)
-	upnp_addtestexecutable(${testName} ${sourceFile})
+function(UPNP_Add_Unit_Test testName sourceFile)
+	UPNP_Add_Test_Executable(${testName} ${sourceFile})
 
 	if(UPNP_BUILD_SHARED)
 		add_test(NAME ${testName} COMMAND ${testName})
@@ -93,7 +93,7 @@ function(UPNP_addUnitTest testName sourceFile)
 			OR MINGW
 			OR CYGWIN
 		)
-			upnp_findtestenv(${testName} TEST_ENV)
+			UPNP_Find_Test_Env(${testName} TEST_ENV)
 
 			set_tests_properties(
 				${testName} PROPERTIES ENVIRONMENT
@@ -108,8 +108,8 @@ function(UPNP_addUnitTest testName sourceFile)
 endfunction()
 
 # For MSVC toolchain only
-function(UPNP_findTestEnv testName resultVar)
-	upnp_findtestlibs(${testName} ${resultVar})
+function(UPNP_Find_Test_Env testName resultVar)
+	UPNP_Find_Test_Libs(${testName} ${resultVar})
 	set(tempEnv "PATH=")
 
 	if(MSVC OR MINGW)
@@ -129,7 +129,7 @@ function(UPNP_findTestEnv testName resultVar)
 	)
 endfunction()
 
-function(UPNP_findTestLibs testName resultVar)
+function(UPNP_Find_Test_Libs testName resultVar)
 	unset(linkLibs)
 
 	if(NOT TARGET ${testName})
@@ -150,7 +150,7 @@ function(UPNP_findTestLibs testName resultVar)
 		)
 
 		foreach(lib IN ITEMS ${linkLibs})
-			upnp_findtestlibs(${lib} ${resultVar})
+			UPNP_Find_Test_Libs(${lib} ${resultVar})
 
 			if(NOT TARGET ${lib})
 				set(interface2 TRUE)
