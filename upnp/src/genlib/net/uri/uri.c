@@ -318,8 +318,8 @@ static int parse_hostport(
 	char *c;
 	struct sockaddr_in *sai4 = (struct sockaddr_in *)&out->IPaddress;
 	struct sockaddr_in6 *sai6 = (struct sockaddr_in6 *)&out->IPaddress;
-	char *srvname = NULL;
-	char *srvport = NULL;
+	char *srv_name = NULL;
+	char *srv_port = NULL;
 	char *last_dot = NULL;
 	unsigned short int port;
 	int af = AF_UNSPEC;
@@ -334,13 +334,13 @@ static int parse_hostport(
 	c = workbuf;
 	if (*c == '[') {
 		/* IPv6 addresses are enclosed in square brackets. */
-		srvname = ++c;
+		srv_name = ++c;
 		while (*c != '\0' && *c != ']')
 			c++;
 		if (*c == '\0')
 			/* did not find closing bracket. */
 			return UPNP_E_INVALID_URL;
-		/* NULL terminate the srvname and then increment c. */
+		/* NULL terminate the srv_name and then increment c. */
 		*c++ = '\0'; /* overwrite the ']' */
 		if (*c == ':') {
 			has_port = 1;
@@ -349,7 +349,7 @@ static int parse_hostport(
 		af = AF_INET6;
 	} else {
 		/* IPv4 address -OR- host name. */
-		srvname = c;
+		srv_name = c;
 		while (*c != ':' && *c != '/' &&
 			(isalnum(*c) || *c == '.' || *c == '-')) {
 			if (*c == '.')
@@ -357,7 +357,7 @@ static int parse_hostport(
 			c++;
 		}
 		has_port = (*c == ':') ? 1 : 0;
-		/* NULL terminate the srvname */
+		/* NULL terminate the srv_name */
 		*c = '\0';
 		if (has_port == 1)
 			c++;
@@ -372,7 +372,7 @@ static int parse_hostport(
 			hints.ai_family = AF_UNSPEC;
 			hints.ai_socktype = SOCK_STREAM;
 
-			ret = getaddrinfo(srvname, NULL, &hints, &res0);
+			ret = getaddrinfo(srv_name, NULL, &hints, &res0);
 			if (ret == 0) {
 				for (res = res0; res; res = res->ai_next) {
 					switch (res->ai_family) {
@@ -400,10 +400,10 @@ static int parse_hostport(
 	/* Check if a port is specified. */
 	if (has_port == 1) {
 		/* Port is specified. */
-		srvport = c;
+		srv_port = c;
 		while (*c != '\0' && isdigit(*c))
 			c++;
-		port = (unsigned short int)atoi(srvport);
+		port = (unsigned short int)atoi(srv_port);
 		if (port == 0)
 			/* Bad port number. */
 			return UPNP_E_INVALID_URL;
@@ -418,13 +418,13 @@ static int parse_hostport(
 	case AF_INET:
 		sai4->sin_family = (sa_family_t)af;
 		sai4->sin_port = htons(port);
-		ret = inet_pton(AF_INET, srvname, &sai4->sin_addr);
+		ret = inet_pton(AF_INET, srv_name, &sai4->sin_addr);
 		break;
 	case AF_INET6:
 		sai6->sin6_family = (sa_family_t)af;
 		sai6->sin6_port = htons(port);
 		sai6->sin6_scope_id = gIF_INDEX;
-		ret = inet_pton(AF_INET6, srvname, &sai6->sin6_addr);
+		ret = inet_pton(AF_INET6, srv_name, &sai6->sin6_addr);
 		break;
 	default:
 		/* IP address was set by the hostname (getaddrinfo). */
