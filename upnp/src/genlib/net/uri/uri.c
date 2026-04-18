@@ -36,6 +36,14 @@
  * \brief Contains functions for uri, url parsing utility.
  */
 
+#include "config.h" // IWYU pragma: keep
+
+#include "posix_overwrites.h" // IWYU pragma: keep
+#include "upnpapi.h"
+#include "uri.h"
+
+#include <assert.h>
+
 #ifdef __FreeBSD__
 	#include <osreldate.h>
 	#if __FreeBSD_version < 601103
@@ -47,14 +55,6 @@
 		#define snprintf _snprintf
 	#endif
 #endif
-#include <assert.h>
-
-#include "config.h" // IWYU pragma: keep
-
-#include "upnpapi.h"
-#include "uri.h"
-
-#include "posix_overwrites.h" // IWYU pragma: keep
 
 /*!
  * \brief Returns a 1 if a char is a RESERVED char as defined in
