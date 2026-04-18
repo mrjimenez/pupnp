@@ -8,6 +8,8 @@ SUBDIRS = . sample
 
 AM_CPPFLAGS = \
 	-I$(srcdir)/inc \
+	-I$(srcdir)/src/inc \
+	-I$(srcdir)/src/threadutil \
 	-I$(top_srcdir)/ixml/inc
 
 LDADD = \
@@ -195,12 +197,14 @@ libupnp_la_SOURCES += \
 endif
 
 # check / distcheck tests
-check_PROGRAMS = test_init test_url test_log test_list
-TESTS = test_init test_url test_log test_list
+check_PROGRAMS = test_init test_url test_log test_list test_parse_uri
+TESTS = test_init test_url test_log test_list test_parse_uri
 test_init_SOURCES = test/test_init.c
 test_url_SOURCES = test/test_url.c
 test_log_SOURCES = test/test_log.c
 test_list_SOURCES = test/test_list.c
+test_parse_uri_SOURCES = test/test_parse_uri.c test/test_parse_uri_impl.c
+test_parse_uri_LDADD = $(LDADD)
 
 EXTRA_DIST = \
 	m4/libupnp.m4 \
