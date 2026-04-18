@@ -49,7 +49,8 @@
 #endif
 #include <assert.h>
 
-#include "config.h"
+#include "config.h" // IWYU pragma: keep
+
 #include "upnpapi.h"
 #include "uri.h"
 
