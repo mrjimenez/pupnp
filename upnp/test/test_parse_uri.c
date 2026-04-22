@@ -1,3 +1,5 @@
+#define UPNP_DEBUG_C
+
 #include "ithread.h"
 #include "upnp.h"
 #include "upnpdebug.h"
