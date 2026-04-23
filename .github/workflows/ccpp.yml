@@ -104,18 +104,28 @@ jobs:
         os: [windows-latest, macos-latest]
         conf: [Debug, Release]
       fail-fast: false
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v6
+      - name: Install OpenSSL (macOS)
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: |
+          brew install openssl@3
+          echo "OPENSSL_ROOT_DIR=$(brew --prefix openssl@3)" >> $GITHUB_ENV
       - name: Configure
-        run: >
-          cmake
-          -S .
-          -B build
-          -DCMAKE_BUILD_TYPE=${{ matrix.conf }}
-          -DBUILD_TESTING=ON
-          -DDOWNLOAD_AND_BUILD_DEPS=ON
-          -DCMAKE_INSTALL_PREFIX=${{ GITHUB.WORKSPACE }}/test-install
-          ${{ env.cmake_extra_flags }}
+        run: |
+          cmake \
+            -S . \
+            -B build \
+            -DCMAKE_BUILD_TYPE=${{ matrix.conf }} \
+            -DBUILD_TESTING=ON \
+            -DDOWNLOAD_AND_BUILD_DEPS=ON \
+            -DUPNP_ENABLE_OPEN_SSL=ON \
+            -DCMAKE_INSTALL_PREFIX=${{ GITHUB.WORKSPACE }}/test-install \
+            ${{ env.cmake_extra_flags }} \
+            ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR="$OPENSSL_ROOT_DIR"}
       - name: Build
         run: cmake --build build --config ${{ matrix.conf }}
       - name: Test
