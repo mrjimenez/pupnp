@@ -14,20 +14,28 @@ on:
 # Some repeated stuff
 #
 env:
-  sanitizer_autotools_flags: '
-    CFLAGS="-fsanitize=address,leak"
-    LDFLAGS="-fsanitize=address,leak"'
+  sanitizer_autotools_flags: |-
+    CFLAGS="-fsanitize=address,leak" \
+    LDFLAGS="-fsanitize=address,leak"
 
-  cmake_sanitizer_flags: "
-    -DCMAKE_C_FLAGS=-fsanitize=address,leak
-    -DCMAKE_CXX_FLAGS=-fsanitize=address,leak
-    -DCMAKE_SHARED_LINKER_FLAGS=-fsanitize=address,leak"
+  cmake_common_flags: |-
+    -S . \
+    -B build \
+    -DBUILD_TESTING=ON \
+    -DDOWNLOAD_AND_BUILD_DEPS=ON \
+    -DUPNP_ENABLE_OPEN_SSL=ON \
+    -DUPNP_ENABLE_UNSPECIFIED_SERVER=ON \
+    -DUPNP_ENABLE_BLOCKING_TCP_CONNECTIONS=ON
 
-  cmake_extra_flags: "
-    -DUPNP_ENABLE_UNSPECIFIED_SERVER=ON
-    -DUPNP_ENABLE_BLOCKING_TCP_CONNECTIONS=ON"
+  cmake_sanitizer_flags: |-
+    -DCMAKE_C_FLAGS="-fsanitize=address,leak" \
+    -DCMAKE_CXX_FLAGS="-fsanitize=address,leak" \
+    -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=address,leak"
 
-  ctest_flags: "--output-on-failure --timeout 5"
+  ctest_flags: |-
+    --test-dir build \
+    --output-on-failure \
+    --timeout 5
 
 jobs:
   # Linux builds
@@ -36,41 +44,33 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        conf: [Debug, Release]
+        os: [ ubuntu-latest ]
+        conf: [ Debug, Release ]
       fail-fast: false
     steps:
       - uses: actions/checkout@v6
-      - name: Configure
-        run: >
-          cmake
-          -S .
-          -B build
-          -DCMAKE_BUILD_TYPE=${{ matrix.conf }}
-          -DBUILD_TESTING=ON
-          -DDOWNLOAD_AND_BUILD_DEPS=ON
-          -DUPNP_ENABLE_OPEN_SSL=ON
-          -DCMAKE_C_FLAGS="-Wall -Wpedantic"
-          -DCMAKE_INSTALL_PREFIX=${{ GITHUB.WORKSPACE }}/test-install
-          ${{ env.cmake_extra_flags }}
-      - name: Build
-        run: cmake --build build --config ${{matrix.conf}}
-      - name: Test
+      - name: Configure (create build system)
         run: |
-          cd build
-          ctest ${{ env.ctest_flags }} -C ${{ matrix.conf }}
-          cd ..
+          cmake \
+            ${{ env.cmake_common_flags }} \
+            -DCMAKE_C_FLAGS="-Wall -Wpedantic" \
+            -DCMAKE_BUILD_TYPE=${{ matrix.conf }} \
+            -DCMAKE_INSTALL_PREFIX=${{ GITHUB.WORKSPACE }}/test-install
+      - name: Build
+        run: cmake --build build --config ${{ matrix.conf }}
+      - name: Test
+        run: ctest ${{ env.ctest_flags }} -C ${{ matrix.conf }}
       - name: Debug output
         run: cmake -DBUILD_DIR=build -P cmake/post-test.cmake
-      - name: install
-        run: cmake --install build --config ${{matrix.conf}}
+      - name: Install
+        run: cmake --install build --config ${{ matrix.conf }}
   omnios:
     name: Build OmniOS - ${{ matrix.conf }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        conf: [Debug, Release]
+        os: [ ubuntu-latest ]
+        conf: [ Debug, Release ]
       fail-fast: false
     steps:
       - uses: actions/checkout@v6
@@ -80,137 +80,139 @@ jobs:
             pkg install cmake gcc14 make
           run: |
             cmake \
-            -S . \
-            -B build \
-            -DCMAKE_BUILD_TYPE=${{ matrix.conf }} \
-            -DBUILD_TESTING=ON \
-            -DDOWNLOAD_AND_BUILD_DEPS=ON \
-            -DUPNP_ENABLE_OPEN_SSL=ON \
-            -DCMAKE_C_FLAGS="-Wall -Wpedantic" \
-            -DCMAKE_INSTALL_PREFIX=${{ GITHUB.WORKSPACE }}/test-install \
-            ${{ env.cmake_extra_flags }}
-            cmake --build build --config ${{matrix.conf}}
-            cd build
+              ${{ env.cmake_common_flags }} \
+              -DCMAKE_C_FLAGS="-Wall -Wpedantic" \
+              -DCMAKE_BUILD_TYPE=${{ matrix.conf }} \
+              -DCMAKE_INSTALL_PREFIX=${{ GITHUB.WORKSPACE }}/test-install
+            cmake --build build --config ${{ matrix.conf }}
             ctest ${{ env.ctest_flags }} -C ${{ matrix.conf }}
-            cd ..
             cmake -DBUILD_DIR=build -P cmake/post-test.cmake
-            cmake --install build --config ${{matrix.conf}}
+            cmake --install build --config ${{ matrix.conf }}
   # Windows Visual Studio builds
   windows-msvc:
-    name: Build (${{ matrix.os }})  - ${{ matrix.conf }}
+    name: Build (${{ matrix.os }}) - ${{ matrix.conf }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
-        conf: [Debug, Release]
+        os: [ windows-latest, macos-latest ]
+        conf: [ Debug, Release ]
       fail-fast: false
+    defaults:
+      run:
+        shell: bash # Fix PowerShell incompatibility
     steps:
       - uses: actions/checkout@v6
+      - name: Install OpenSSL (Windows)
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          echo "OPENSSL_ROOT_DIR=C:/Program Files/OpenSSL" >> $GITHUB_ENV
+          echo "OPENSSL_INCLUDE_DIR=C:/Program Files/OpenSSL-Win64/include" >> $GITHUB_ENV
+          echo "OPENSSL_CRYPTO_LIBRARY=C:/Program Files/OpenSSL-Win64/lib/libcrypto.lib" >> $GITHUB_ENV
+          echo "OPENSSL_SSL_LIBRARY=C:/Program Files/OpenSSL-Win64/lib/libssl.lib" >> $GITHUB_ENV
+      - name: Install OpenSSL (macOS)
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: |
+          brew install openssl
+          # Save OpenSSL path for CMake
+          echo "OPENSSL_ROOT_DIR=$(brew --prefix openssl)" >> $GITHUB_ENV
+          echo "OPENSSL_INCLUDE_DIR=$(brew --prefix openssl)/include" >> $GITHUB_ENV
+          echo "OPENSSL_CRYPTO_LIBRARY=$(brew --prefix openssl)/lib/libcrypto.dylib" >> $GITHUB_ENV
+          echo "OPENSSL_SSL_LIBRARY=$(brew --prefix openssl)/lib/libssl.dylib" >> $GITHUB_ENV
       - name: Configure
-        run: >
-          cmake
-          -S .
-          -B build
-          -DCMAKE_BUILD_TYPE=${{ matrix.conf }}
-          -DBUILD_TESTING=ON
-          -DDOWNLOAD_AND_BUILD_DEPS=ON
-          -DCMAKE_INSTALL_PREFIX=${{ GITHUB.WORKSPACE }}/test-install
-          ${{ env.cmake_extra_flags }}
+        # ${OPENSSL_INCLUDE_DIR:+-DCMAKE_C_FLAGS="-I\"$OPENSSL_INCLUDE_DIR\""} \
+        run: |
+          cmake \
+            ${{ env.cmake_common_flags }} \
+            -DCMAKE_BUILD_TYPE=${{ matrix.conf }} \
+            -DCMAKE_INSTALL_PREFIX=${{ GITHUB.WORKSPACE }}/test-install \
+            ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR="$OPENSSL_ROOT_DIR"} \
+            ${OPENSSL_INCLUDE_DIR:+-DOPENSSL_INCLUDE_DIR="$OPENSSL_INCLUDE_DIR"} \
+            ${OPENSSL_CRYPTO_LIBRARY:+-DOPENSSL_CRYPTO_LIBRARY="$OPENSSL_CRYPTO_LIBRARY"} \
+            ${OPENSSL_SSL_LIBRARY:+-DOPENSSL_SSL_LIBRARY="$OPENSSL_SSL_LIBRARY"}
       - name: Build
         run: cmake --build build --config ${{ matrix.conf }}
       - name: Test
-        run: |
-          cd build
-          ctest ${{ env.ctest_flags }} -C ${{ matrix.conf }}
-          cd ..
+        run: ctest ${{ env.ctest_flags }} -C ${{ matrix.conf }}
       - name: Debug output
         run: cmake -DBUILD_DIR=build -P cmake/post-test.cmake
-      - name: install
-        run: cmake --install build --config ${{matrix.conf}}
+      - name: Install
+        run: cmake --install build --config ${{ matrix.conf }}
   # Windows msys2 builds
   windows-msys2:
-    name: Build MSys ${{matrix.sys}} - ${{matrix.conf}}
+    name: Build MSys ${{ matrix.sys }} - ${{ matrix.conf }}
     runs-on: windows-latest
     strategy:
       matrix:
-        sys: [mingw64, mingw32, ucrt64, clang64]
-        conf: [Release, Debug]
+        sys: [ mingw64, mingw32, ucrt64, clang64 ]
+        conf: [ Release, Debug ]
+    defaults:
+      run:
+        shell: msys2 {0}
     steps:
-      - name: install sys (mingw64)
+      - name: Install sys (mingw64)
         uses: msys2/setup-msys2@v2
         if: ${{ matrix.sys == 'mingw64' }}
         with:
-          msystem: ${{matrix.sys}}
+          msystem: ${{ matrix.sys }}
           install: mingw-w64-x86_64-cmake mingw-w64-x86_64-make git mingw-w64-x86_64-gcc
-      - name: install sys (mingw32)
+      - name: Install sys (mingw32)
         uses: msys2/setup-msys2@v2
         if: ${{ matrix.sys == 'mingw32' }}
         with:
-          msystem: ${{matrix.sys}}
+          msystem: ${{ matrix.sys }}
           install: mingw-w64-i686-cmake mingw-w64-i686-make git mingw-w64-i686-gcc
-      - name: install sys (ucrt64)
+      - name: Install sys (ucrt64)
         uses: msys2/setup-msys2@v2
         if: ${{ matrix.sys == 'ucrt64' }}
         with:
-          msystem: ${{matrix.sys}}
-          install: mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-make git mingw-w64-ucrt-x86_64-gcc
-      - name: install sys (clang64)
+          msystem: ${{ matrix.sys }}
+          install: mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-make git
+            mingw-w64-ucrt-x86_64-gcc
+      - name: Install sys (clang64)
         uses: msys2/setup-msys2@v2
         if: ${{ matrix.sys == 'clang64' }}
         with:
-          msystem: ${{matrix.sys}}
-          install: mingw-w64-clang-x86_64-cmake mingw-w64-clang-x86_64-make git mingw-w64-clang-x86_64-gcc
+          msystem: ${{ matrix.sys }}
+          install: mingw-w64-clang-x86_64-cmake mingw-w64-clang-x86_64-make git
+            mingw-w64-clang-x86_64-gcc
       - uses: actions/checkout@v6
       - name: Configure
-        run: >
-          cmake
-          -S .
-          -B build
-          -DCMAKE_BUILD_TYPE=${{ matrix.conf }}
-          -DBUILD_TESTING=ON
-          -DDOWNLOAD_AND_BUILD_DEPS=ON
-          -DCMAKE_INSTALL_PREFIX=${{ GITHUB.WORKSPACE }}/test-install
-          ${{ env.cmake_extra_flags }}
-      - name: Build
-        run: cmake --build build --config ${{matrix.conf}}
-      - name: Test
         run: |
-          cd build
-          ctest ${{ env.ctest_flags }} -C ${{ matrix.conf }}
-          cd ..
+          cmake \
+            ${{ env.cmake_common_flags }} \
+            -DCMAKE_BUILD_TYPE=${{ matrix.conf }} \
+            -DCMAKE_INSTALL_PREFIX=${{ GITHUB.WORKSPACE }}/test-install
+      - name: Build
+        run: cmake --build build --config ${{ matrix.conf }}
+      - name: Test
+        run: ctest ${{ env.ctest_flags }}
       - name: Debug output
         run: cmake -DBUILD_DIR=build -P cmake/post-test.cmake
-      - name: install
-        run: cmake --install build --config ${{matrix.conf}}
+      - name: Install
+        run: cmake --install build --config ${{ matrix.conf }}
   # Linux sanitizer builds
   build_asan:
     name: Sanitizer build (ubuntu-latest) - ${{ matrix.tool }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tool: [autotools, cmake]
-        conf: [Debug]
+        tool: [ autotools, cmake ]
+        conf: [ Debug ]
     steps:
       - uses: actions/checkout@v6
       - name: bootstrap and configure (autotools)
         if: ${{ matrix.tool == 'autotools' }}
-        run: >
-          ./bootstrap &&
-          ./configure
-          --enable-debug
-          ${{ env.sanitizer_autotools_flags }}
+        run: |
+          ./bootstrap && \
+          ./configure --enable-debug ${{ env.sanitizer_autotools_flags }}
       - name: configure (cmake)
         if: ${{ matrix.tool == 'cmake' }}
-        run: >
-          cmake
-          -S .
-          -B build
-          -DBUILD_TESTING=ON
-          -DCMAKE_BUILD_TYPE=${{ matrix.conf }}
-          -DDOWNLOAD_AND_BUILD_DEPS=ON
-          -DUPNP_ENABLE_OPEN_SSL=ON
-          ${{ env.cmake_sanitizer_flags }}
-          ${{ env.cmake_extra_flags }}
+        run: |
+          cmake \
+            ${{ env.cmake_common_flags }} \
+            -DCMAKE_C_FLAGS="-Wall -Wpedantic" \
+            -DCMAKE_BUILD_TYPE=${{ matrix.conf }} \
+            ${{ env.cmake_sanitizer_flags }}
       - name: build (autotools)
         if: ${{ matrix.tool == 'autotools' }}
         run: make
@@ -220,15 +222,14 @@ jobs:
       - name: test ixml (autotools)
         if: ${{ matrix.tool == 'autotools' }}
         run: >
-          cd ixml && make check ||
-          (cat test-suite.log && exit 1)
+          cd ixml && make check || (cat test-suite.log && exit 1)
       - name: test upnp (autotools)
         if: ${{ matrix.tool == 'autotools' }}
-        run: >
-          cd upnp && make check && cat test_init.log ||
+        run: |
+          cd upnp && \
+          make check && \
+          cat test_init.log || \
           (cat test-suite.log test_init.log && exit 1)
       - name: ctest (cmake)
         if: ${{ matrix.tool == 'cmake' }}
-        run: |
-          cd build
-          ctest ${{ env.ctest_flags }}
+        run: ctest ${{ env.ctest_flags }}
