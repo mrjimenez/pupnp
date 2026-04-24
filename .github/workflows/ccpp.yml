@@ -110,9 +110,6 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           echo "OPENSSL_ROOT_DIR=C:/Program Files/OpenSSL" >> $GITHUB_ENV
-          echo "OPENSSL_INCLUDE_DIR=C:/Program Files/OpenSSL-Win64/include" >> $GITHUB_ENV
-          echo "OPENSSL_CRYPTO_LIBRARY=C:/Program Files/OpenSSL-Win64/lib/libcrypto.lib" >> $GITHUB_ENV
-          echo "OPENSSL_SSL_LIBRARY=C:/Program Files/OpenSSL-Win64/lib/libssl.lib" >> $GITHUB_ENV
       - name: Install OpenSSL (macOS)
         if: ${{ matrix.os == 'macos-latest' }}
         run: |
@@ -123,7 +120,6 @@ jobs:
           echo "OPENSSL_CRYPTO_LIBRARY=$(brew --prefix openssl)/lib/libcrypto.dylib" >> $GITHUB_ENV
           echo "OPENSSL_SSL_LIBRARY=$(brew --prefix openssl)/lib/libssl.dylib" >> $GITHUB_ENV
       - name: Configure
-        # ${OPENSSL_INCLUDE_DIR:+-DCMAKE_C_FLAGS="-I\"$OPENSSL_INCLUDE_DIR\""} \
         run: |
           cmake \
             ${{ env.cmake_common_flags }} \
@@ -131,6 +127,7 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=${{ GITHUB.WORKSPACE }}/test-install \
             ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR="$OPENSSL_ROOT_DIR"} \
             ${OPENSSL_INCLUDE_DIR:+-DOPENSSL_INCLUDE_DIR="$OPENSSL_INCLUDE_DIR"} \
+            ${OPENSSL_INCLUDE_DIR:+-DCMAKE_C_FLAGS="-I\"$OPENSSL_INCLUDE_DIR\""} \
             ${OPENSSL_CRYPTO_LIBRARY:+-DOPENSSL_CRYPTO_LIBRARY="$OPENSSL_CRYPTO_LIBRARY"} \
             ${OPENSSL_SSL_LIBRARY:+-DOPENSSL_SSL_LIBRARY="$OPENSSL_SSL_LIBRARY"}
       - name: Build

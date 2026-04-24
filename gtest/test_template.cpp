@@ -27,7 +27,7 @@ TEST(EmptyTestSuite, empty_gtest)
 	//GTEST_SKIP_("to show this feature");
 
 	// SKIP on Github Actions
-#ifdef _WIN32
+#ifdef _MSC_VER
 	char* github_action;
 	size_t len;
 	_dupenv_s(&github_action, &len, "GITHUB_ACTIONS");
