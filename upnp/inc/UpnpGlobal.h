@@ -30,7 +30,7 @@
 		#else /* LIBUPNP_EXPORTS */
 			#define UPNP_EXPORT_SPEC __declspec(dllimport)
 		#endif /* LIBUPNP_EXPORTS */
-	#endif /* UPNP_STATIC_LIB */
+	#endif	       /* UPNP_STATIC_LIB */
 
 	/*
 	 * UPNP_INLINE
