@@ -185,6 +185,12 @@ function(IXML_add_unit_test testName sourceFile parameters)
 	if(UPNP_BUILD_SHARED)
 		add_executable("${testName}-shared" "${sourceFile}")
 		target_link_libraries("${testName}-shared" PRIVATE ixml_shared)
+		if(MINGW OR MSYS)
+			target_link_options(
+				"${testName}-shared" PRIVATE -static-libstdc++
+							-static-libgcc
+			)
+		endif()
 		add_test(NAME ${testName} COMMAND "${testName}-shared"
 							${parameters}
 		)
