@@ -150,7 +150,7 @@ if(UPNP_BUILD_SHARED)
 
 	target_link_libraries(
 		upnp_shared
-		PRIVATE $<$<BOOL:${UPNP_ENABLE_OPEN_SSL}>:OpenSSL::SSL>
+		PUBLIC $<$<BOOL:${UPNP_ENABLE_OPEN_SSL}>:OpenSSL::SSL>
 		PRIVATE $<$<PLATFORM_ID:SunOS>:nsl>
 		PRIVATE $<$<PLATFORM_ID:SunOS>:socket>
 		PRIVATE $<$<PLATFORM_ID:Windows>:ws2_32>
@@ -216,7 +216,7 @@ if(UPNP_BUILD_STATIC)
 
 	target_link_libraries(
 		upnp_static
-		PRIVATE $<$<BOOL:${UPNP_ENABLE_OPEN_SSL}>:OpenSSL::SSL>
+		PUBLIC $<$<BOOL:${UPNP_ENABLE_OPEN_SSL}>:OpenSSL::SSL>
 		PRIVATE $<$<PLATFORM_ID:SunOS>:nsl>
 		PRIVATE $<$<PLATFORM_ID:SunOS>:socket>
 		PRIVATE $<$<PLATFORM_ID:Windows>:ws2_32>
