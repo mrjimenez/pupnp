@@ -5,6 +5,9 @@ on:
     branches:
       - "!no_ci-*"
 
+permissions:
+  contents: read
+
 jobs:
   Fuzzing:
     runs-on: ubuntu-latest
