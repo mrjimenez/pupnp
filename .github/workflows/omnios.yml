@@ -1,29 +1,42 @@
 name: OmniOS test
 
-on: [workflow_dispatch]
+on: [ workflow_dispatch ]
+
+permissions:
+  contents: read
 
 env:
-  sanitizer_autotools_flags: '
-    CFLAGS="-fsanitize=address,leak"
-    LDFLAGS="-fsanitize=address,leak"'
+  sanitizer_autotools_flags: |-
+    CFLAGS="-fsanitize=address,leak" \
+    LDFLAGS="-fsanitize=address,leak"
 
-  cmake_sanitizer_flags: "
-    -DCMAKE_C_FLAGS=-fsanitize=address,leak
-    -DCMAKE_CXX_FLAGS=-fsanitize=address,leak
+  cmake_common_flags: |-
+    -S . \
+    -B build \
+    -DBUILD_TESTING=ON \
+    -DDOWNLOAD_AND_BUILD_DEPS=ON \
+    -DUPNP_ENABLE_OPEN_SSL=ON \
+    -DUPNP_ENABLE_UNSPECIFIED_SERVER=ON \
+    -DUPNP_ENABLE_BLOCKING_TCP_CONNECTIONS=ON
+
+  cmake_sanitizer_flags: |-
+    -DCMAKE_C_FLAGS=-fsanitize=address,leak \
+    -DCMAKE_CXX_FLAGS=-fsanitize=address,leak \
     -DCMAKE_SHARED_LINKER_FLAGS=-fsanitize=address,leak"
 
-  cmake_extra_flags: "
-    -DUPNP_ENABLE_UNSPECIFIED_SERVER=ON
-    -DUPNP_ENABLE_BLOCKING_TCP_CONNECTIONS=ON"
+  ctest_flags: |-
+    --test-dir build \
+    --output-on-failure \
+    --timeout 30
 
 jobs:
   omnios:
-    name: Build OmniOS - ${{ matrix.conf }}
+    name: Build OmniOS - ${{ matrix.conf }} / ${{ matrix.os }} (VM)
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        conf: [Debug, Release]
+        os: [ ubuntu-latest ]
+        conf: [ Debug, Release ]
       fail-fast: false
     steps:
       - uses: actions/checkout@v6
@@ -33,19 +46,20 @@ jobs:
             pkg install cmake gcc14 make
           run: |
             cmake \
-            -S . \
-            -B build \
-            -DCMAKE_BUILD_TYPE=${{ matrix.conf }} \
-            -DBUILD_TESTING=ON \
-            -DDOWNLOAD_AND_BUILD_DEPS=ON \
-            -DUPNP_ENABLE_OPEN_SSL=ON \
-            -DCMAKE_C_FLAGS="-Wall -Wpedantic" \
-            -DCMAKE_INSTALL_PREFIX=${{ GITHUB.WORKSPACE }}/test-install \
-            ${{ env.cmake_extra_flags }}
-            cmake --build build --config ${{matrix.conf}}
-            cd build
-            ctest --output-on-failure
+              ${{ env.cmake_common_flags }} \
+              -DCMAKE_C_FLAGS="-Wall -Wpedantic" \
+              -DCMAKE_BUILD_TYPE=${{ matrix.conf }} \
+              -DCMAKE_INSTALL_PREFIX=${{ GITHUB.WORKSPACE }}/test-install \
+            cmake \
+              --build build \
+              --config ${{matrix.conf}}
+            ctest \
+              ${{ env.ctest_flags }} \
+              -C ${{ matrix.conf }}
             echo "ctest returned status "$?
-            cd ..
-            cmake -DBUILD_DIR=build -P cmake/post-test.cmake
-            cmake --install build --config ${{matrix.conf}}
+            cmake \
+              -DBUILD_DIR=build \
+              -P cmake/post-test.cmake
+            cmake \
+              --install build \
+              --config ${{matrix.conf}}
