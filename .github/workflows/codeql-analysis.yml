@@ -13,8 +13,8 @@ name: "CodeQL"
 
 permissions:
   contents: read
-  pull-requests: write
-  security-events: read
+  security-events: write # Required to upload CodeQL results
+  actions: read # Required for CodeQL on private repos / fork PRs
 
 on:
   push:
